@@ -68,6 +68,8 @@ class Login extends CI_Controller {
                     'namaperusahaan' => $rowpengaturan->namaperusahaan,
                     'alamatperusahaan' => $rowpengaturan->alamatperusahaan,
                     'notelp' => $rowpengaturan->notelp,
+                    'kodeakunbarang' => $rowpengaturan->kodeakunbarang,
+                    'levelmaxakunbarang' => $rowpengaturan->levelmaxakunbarang,
                 );
                                 
                 $this->session->set_userdata( $data );  

@@ -90,6 +90,8 @@
     $(".tanggal").mask("00-00-0000", {placeholder:"dd-mm-yyyy"});
     $(".rupiah").mask("000,000,000,000", {reverse: true, placeholder:"000,000,000,000"});
     $('.rupiah').addClass('text-right');
+    $(".angka").mask("000,000,000,000", {reverse: true, placeholder:"000,000"});
+    $('.angka').addClass('text-right');
     
 </script>
 
