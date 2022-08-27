@@ -44,14 +44,14 @@ class Stokopname extends MY_Controller {
         							");
         $rowpengaturan = $this->db->query("select * from pengaturan")->row();
 
-        // error_reporting(0);
+        error_reporting(0);
         $this->load->library('Pdf');
             // exit();
 
         $data['rowpengaturan'] = $rowpengaturan;
         $data['rowstokopname'] = $rowstokopname;
         $data['rsstokopnamedetail'] = $rsstokopnamedetail;
-        $this->load->view('lappenerimaan/cetakso', $data);
+        $this->load->view('stokopname/cetakso', $data);
     }
 
     public function datatablesource()

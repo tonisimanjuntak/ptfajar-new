@@ -86,7 +86,7 @@ $title = '
                 </td>
                 <td style="width:50%; text-align:center;">
                     <span style="">LAPORAN STOK OPNAME</span><br>
-                    <span style="font-size: 14px;">PERIODE : '.tglindonesia($rowstokopname->tglstokopname).'</span>
+                    <span style="font-size: 14px;">PERIODE : '.strtoupper(tglindonesialengkap($rowstokopname->tglstokopname)).'</span>
                 </td>                
             </tr>
         </tbody>
@@ -100,17 +100,17 @@ $table = '';
 $table  .= '<br>
             <table border="0" width="100%" cellpadding="5">
                 <thead>
-                    <tr>
-                        <th style="width: 20%;">ID STOKOPNAME</th>
+                    <tr style="font-weight: bold;">
+                        <th style="width: 20%;">Id Stokopname</th>
                         <th style="width: 5%;">:</th>
                         <th style="width: 75%;">'.$rowstokopname->idstokopname.'</th>
                     </tr>
-                    <tr>
-                        <th style="width: 20%;">NAMA PEGAWAI</th>
+                    <tr style="font-weight: bold;">
+                        <th style="width: 20%;">Nama Pegawai</th>
                         <th style="width: 5%;">:</th>
                         <th style="width: 75%;">'.$rowstokopname->namapengguna.'</th>
                     </tr>
-                    <tr>
+                    <tr style="font-weight: bold;">
                         <th style="width: 20%;">Deskripsi</th>
                         <th style="width: 5%;">:</th>
                         <th style="width: 75%;">'.$rowstokopname->deskripsi.'</th>
@@ -122,7 +122,7 @@ $table  .= '<br>
 
 
 
-$table  .= '<br><table border="1" width="100%" cellpadding="5">';
+$table  .= '<br><br><table border="1" width="100%" cellpadding="5">';
 $table .= ' 
             <thead>
                 <tr style="background-color:#ccc;">
@@ -145,10 +145,10 @@ if ($rsstokopnamedetail->num_rows() > 0) {
         $table .='          
                     <tr>
                         <td style="font-size:11px; text-align:center;" width="5%">'.$no++.'</td>
-                        <td style="font-size:11px; text-align:center;" width="50%">'.$row->namaakun.'</td>
-                        <td style="font-size:11px; text-align:left;" width="15%">'.number_format($row->jumlahpersediaansistem).'</td>
-                        <td style="font-size:11px; text-align:left;" width="15%">'.number_format($row->jumlahpersediaaninput).'</td>
-                        <td style="font-size:11px; text-align:left;" width="15%">'.number_format($row->selisih).'</td>
+                        <td style="font-size:11px; text-align:left;" width="50%">'.$row->namaakun.'</td>
+                        <td style="font-size:11px; text-align:center;" width="15%">'.number_format($row->jumlahpersediaansistem).'</td>
+                        <td style="font-size:11px; text-align:center;" width="15%">'.number_format($row->jumlahpersediaaninput).'</td>
+                        <td style="font-size:11px; text-align:center;" width="15%">'.number_format($row->selisih).'</td>
                     </tr>
                     ';
 
