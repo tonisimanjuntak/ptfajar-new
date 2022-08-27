@@ -11,6 +11,20 @@ class App extends CI_Model {
     	return $this->db->get('v_akun');
     }
 
+    public function get_stok_akhir($kodeakun)
+    {
+    	$rowpersediaansistem = $this->db->query("
+                                        select stokakhir from kartustok where kodeakun='".$kodeakun."' order by tglinsert desc, idkartustok desc limit 1
+                                        ");
+    	if ($rowpersediaansistem->num_rows()>0) {
+    		$stokakhir = $rowpersediaansistem->row()->stokakhir;
+    	}else{
+    		$stokakhir = 0;
+    	}
+
+    	return $stokakhir;
+    }
+
 }
 
 /* End of file App.php */

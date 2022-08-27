@@ -65,7 +65,7 @@ class Stokopname extends MY_Controller {
                 $no++;
                 $row = array();
                 $row[] = $no;
-                $row[] = $rowdata->tglstokopname;
+                $row[] = tglindonesia($rowdata->tglstokopname);
                 $row[] = $rowdata->namapengguna;
                 $row[] = $rowdata->deskripsi;
                 $row[] = '
