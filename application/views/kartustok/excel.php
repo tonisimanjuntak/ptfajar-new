@@ -15,7 +15,7 @@ body{
 <?php
 
 header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=Laporan Penerimaan.xls");
+header("Content-Disposition: attachment; filename=Kartu Stok.xls");
 
 
 if ($tglawal==$tglakhir) {
@@ -39,10 +39,7 @@ $table .= '
     <table style="" border="0" cellpadding="2">
         <tbody>
             <tr>
-                <td style="width:25%; text-align:center;">
-                    <img src="'.$logoperusahaan.'" style="height:80px; width:auto; display:block; margin:0 auto;">
-                </td>
-                <td style="width:50%; text-align:center;">
+                <td style="width:100%; text-align:center;">
                     <span style="">LAPORAN PENERIMAAN</span><br>
                     <span style="font-size: 14px;">PERIODE : '.$periode.'</span>
                 </td>                
@@ -53,94 +50,79 @@ $table .= '
 
 
 
+$table  .= '<br>
+            <table border="0" width="100%" cellpadding="5">
+                <thead>
+                    <tr style="font-size: 14px; font-weight: bold;">
+                        <th style="width: 20%;">KODE AKUN BARANG</th>
+                        <th style="width: 5%; text-align: center;">:</th>
+                        <th style="width: 75%;">'.$rowakun->kodeakun.'</th>
+                    </tr>
+                    <tr style="font-size: 14px; font-weight: bold;">
+                        <th style="width: 20%;">NAMA AKUN BARANG</th>
+                        <th style="width: 5%; text-align: center;">:</th>
+                        <th style="width: 75%;">'.$rowakun->namaakun.'</th>
+                    </tr>
+                </thead>
+            </table>
+            ';
 
-$table  .= '<br><table border="1" width="100%" cellpadding="5">';
+
+$table  .= '<br><br><table border="1" width="100%" cellpadding="5">';
 $table .= ' 
             <thead>
-                <tr style="background-color:#ccc;">
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="5%">NO</th>
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="15%">TANGGAL</th>
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="35%">KETERANGAN</th>
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="15%">QTY</th>
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="15%">HARGA BELI</th>
-                    <th style="font-size:12px; font-weight:bold; text-align:center;" width="15%">SUBTOTAL</th>
+                <tr style="background-color:#ccc; font-size:11px; font-weight:bold;">
+                    <th style="text-align:center;" width="5%">NO</th>
+                    <th style="text-align:center;" width="15%">TANGGAL</th>
+                    <th style="text-align:center;" width="10%">NO BUKTI</th>
+                    <th style="text-align:center;" width="10%">TGL BUKTI</th>
+                    <th style="text-align:center;" width="10%">STOK AWAL</th>
+                    <th style="text-align:center;" width="10%">PENERIMAAN</th>
+                    <th style="text-align:center;" width="10%">PENGELUARAN</th>
+                    <th style="text-align:center;" width="10%">STOK AKHIR</th>
+                    <th style="text-align:center;" width="20%">KETERANGAN</th>
                 </tr>
             </thead>
             <tbody>';
 
-$tglpenerimaan          = '';
-$tglpenerimaan_lama     = '';
-$total = 0;
-$spasi = str_repeat('&nbsp;', 10);
 
-$no=1;
-$idpenerimaan_old ='';
-
-if ($rslaporan->num_rows() > 0) {
+$nomor = $this->db->query("select count(*) as nomor from kartustok where CONVERT(tglinsert, DATE) < '".$tglawal."'")->row()->nomor;
+$nomor++;
+if ($rskartustok->num_rows() > 0) {
     
-    foreach ($rslaporan->result() as $row) {
+    foreach ($rskartustok->result() as $row) {
 
-        if ($idpenerimaan_old != $row->idpenerimaan) {
-            
-            $table .='          
-                    <tr>
-                        <td style="font-size:11px; text-align:center;" width="5%">'.$no++.'</td>
-                        <td style="font-size:11px; text-align:center;" width="15%">'.tglindonesia($row->tglpenerimaan).'</td>
-                        <td style="font-size:11px; text-align:left;" width="35%">'.$row->deskripsi.'</td>
-                        <td style="font-size:11px; text-align:center;" width="15%"></td>
-                        <td style="font-size:11px; text-align:right;" width="15%"></td>
-                        <td style="font-size:11px; text-align:right;" width="15%"></td>
-                    </tr>
+        
 
+        $table .= '
+                <tr style="font-size:10px;">
+                    <td style="text-align:center;" width="5%">'.$nomor++.'</td>
+                    <td style="text-align:center;" width="15%">'.date('d-m-Y H:i:s', strtotime($row->tglinsert)).'</td>
+                    <td style="text-align:center;" width="10%">'.$row->idtransaksi.'</td>
+                    <td style="text-align:center;" width="10%">'.$row->tgltransaksi.'</td>
+                    <td style="text-align:center;" width="10%">'.number_format($row->stokawal).'</td>
+                    <td style="text-align:center;" width="10%">'.number_format($row->jumlahmasuk).'</td>
+                    <td style="text-align:center;" width="10%">'.number_format($row->jumlahkeluar).'</td>
+                    <td style="text-align:center;" width="10%">'.number_format($row->stokakhir).'</td>
+                    <td style="text-align:left;" width="20%">'.$row->deskripsi.'</td>
+                </tr>
+        ';
 
-                    <tr>
-                        <td style="font-size:11px; text-align:center;" width="5%"></td>
-                        <td style="font-size:11px; text-align:center;" width="15%"></td>
-                        <td style="font-size:11px; text-align:left;" width="35%">'.$spasi.$row->namaakun.'</td>
-                        <td style="font-size:11px; text-align:center;" width="15%">'.number_format($row->jumlahbarang).'</td>
-                        <td style="font-size:11px; text-align:right;" width="15%">'.format_rupiah($row->hargabeli).'</td>
-                        <td style="font-size:11px; text-align:right;" width="15%">'.format_rupiah($row->totalharga).'</td>
-                    </tr>';
-
-
-        }else{
-            $table .='          
-                    <tr>
-                        <td style="font-size:11px; text-align:center;" width="5%"></td>
-                        <td style="font-size:11px; text-align:center;" width="15%"></td>
-                        <td style="font-size:11px; text-align:left;" width="35%">'.$spasi.$row->namaakun.'</td>
-                        <td style="font-size:11px; text-align:center;" width="15%">'.number_format($row->jumlahbarang).'</td>
-                        <td style="font-size:11px; text-align:right;" width="15%">'.format_rupiah($row->hargabeli).'</td>
-                        <td style="font-size:11px; text-align:right;" width="15%">'.format_rupiah($row->totalharga).'</td>
-                    </tr>';
-            
-        }
-
-        $idpenerimaan_old = $row->idpenerimaan;
-        $total += $row->totalharga;
     }
 
 }else{
 
     $table .='          
                 <tr>
-                    <th style="font-size:11px; text-align:center;" width="100%" colspan="6">Data Tidak Ada . . .</th>                   
+                    <th style="font-size:11px; text-align:center;" width="100%" colspan="8">Data Tidak Ada . . .</th>                   
                 </tr>';
 }
             
 
 
-$table .='          
-                    <tr style="font-weight: bold;">
-                        <td style="font-size:11px; text-align:center;" width="70%" colspan="5">TOTAL</td>
-                        <td style="font-size:11px; text-align:right;" width="15%">'.format_rupiah($total).'</td>
-                    </tr>';
-
 
 $table .= ' </tbody>
             </table>';
-
-
 
 
 echo $table;
