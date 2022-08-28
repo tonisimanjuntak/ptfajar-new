@@ -25,6 +25,11 @@ class App extends CI_Model {
     	return $stokakhir;
     }
 
+    public function get_hargajual_ma($kodeakun, $tahun)
+    {
+        return $this->db->query("select get_hargajual_ma('".$kodeakun."', '".$tahun."') as hargajual")->row()->hargajual;
+    }
+
 }
 
 /* End of file App.php */

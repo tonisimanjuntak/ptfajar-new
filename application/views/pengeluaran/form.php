@@ -49,9 +49,29 @@
                     <label for="" class="col-md-2 col-form-label">Jenis Pengeluaran</label>
                     <div class="col-md-10">
                       <select name="jenispengeluaran" id="jenispengeluaran" class="form-control">
-                        <option value="">Pilih jenis pengeluaran...</option>
                         <option value="Penjualan">Penjualan</option>
                         <option value="Barang Keluar">Barang Keluar</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row required" id="dividgudang">
+                    <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
+                    <div class="col-md-10">
+                      <select name="idgudang" id="idgudang" class="form-control select2">
+                        <option value="">Pilih nama gudang</option>
+                        <?php  
+                          $rsgudang = $this->db->query("
+                                select * from gudang where statusaktif = 'Aktif' order by namagudang
+                            ");
+                          if ($rsgudang->num_rows()>0) {
+                            foreach ($rsgudang->result() as $row) {
+                              echo '
+                                  <option value="'.$row->idgudang.'">'.$row->namagudang.'</option>
+                              ';
+                            }
+                          }
+                        ?>
                       </select>
                     </div>
                   </div>
@@ -66,7 +86,7 @@
                           <form action="<?php echo(site_url('pengeluaran/simpan')) ?>" method="post" id="form">                      
                             <div class="row">
 
-                              <div class="col-md-5">
+                              <div class="col-md-4">
                                 <div class="form-group">
                                   <label for="">Kode Akun</label>
                                     <select name="kodeakun" id="kodeakun" class="form-control select2">
@@ -82,8 +102,10 @@
                                       ?>  
                                     </select>
                                 </div>
+                                <label for="" class="text-info">Jumlah Persediaan : <span id="lbljumlahpersediaan">0</span></label>
+                                <input type="hidden" id="jumlahpersediaan" value="0">
                               </div>
-                              <div class="col-md-1">
+                              <div class="col-md-2">
                                 <div class="form-group">
                                   <label for="">Qty</label>
                                   <input type="number" name="jumlahbarang" id="jumlahbarang" class="form-control" value="1" min="1">
@@ -169,7 +191,7 @@
   $(document).ready(function() {
 
     $('.select2').select2();
-    
+    $('#dividgudang').hide();
 
     table = $('#table').DataTable({ 
         "select": true,
@@ -246,6 +268,9 @@
             $('#deskripsi').val(result.deskripsi);
             $('#idgudang').val(result.idgudang).trigger('change');
             $('#jenispengeluaran').val(result.jenispengeluaran);
+            if (result.jenispengeluaran=='Barang Keluar') {
+              $('#dividgudang').show();
+            }
           }); 
           
           $('#lbljudul').html('Edit Data Pengeluaran');
@@ -302,6 +327,7 @@
     var jumlahbarang           = $('#jumlahbarang').val();
     var hargajual           = $('#hargajual').val();
     var totalharga           = $('#totalharga').val();
+    var jumlahpersediaan           = $('#jumlahpersediaan').val();
 
         if (hargajual=="0") {
           swal("Harga jual!", "Harga jual tidak boleh kosong.", "info");
@@ -309,6 +335,11 @@
         }
         if (totalharga=="0") {
           swal("Total Harga!", "Total Harga tidak boleh kosong.", "info");
+          return false;
+        }
+
+        if (parseInt(jumlahpersediaan) < parseInt(jumlahbarang) ) {
+          swal("Stok Barang!", "Jumlah stok barang tidak mencukupi.", "info");
           return false;
         }
       
@@ -352,12 +383,23 @@
     // $('#hargajualsatuan').mask('000,000,000,000', {reverse: true, placeholder:"000,000,000,000"});
   }); //end (document).ready
   
+  
+  $('#jenispengeluaran').change(function() {
+    var jenispengeluaran = $(this).val();
+    if (jenispengeluaran=='Barang Keluar') {
+      $('#dividgudang').show();
+    }else{
+      $('#dividgudang').hide();
+      $('#idgudang').val("").trigger('change');
+    }
+  });
 
   
   $('#simpan').click(function(){
     var idpengeluaran       = $("#idpengeluaran").val();
     var tglpengeluaran       = $("#tglpengeluaran").val();
     var deskripsi       = $("#deskripsi").val();
+    var idgudang       = $("#idgudang").val();
     var jenispengeluaran       = $("#jenispengeluaran").val();
     var jumlahpengeluaran       = $("#total").val();
 
@@ -371,6 +413,10 @@
       }
       if (jenispengeluaran=='') {
         swal("Jenis Pengeluaran!", "Jenis pengeluaran tidak boleh kosong.", "info");
+        return; 
+      }
+      if (jenispengeluaran=='Barang Keluar' && idgudang=='') {
+        swal("Nama Gudang!", "Nama gudang tidak boleh kosong.", "info");
         return; 
       }
       if (jumlahpengeluaran=='') {
@@ -389,6 +435,7 @@
               "idpengeluaran"       : idpengeluaran,
               "tglpengeluaran"       : tglpengeluaran,
               "deskripsi"       : deskripsi,
+              "idgudang"       : idgudang,
               "jenispengeluaran"       : jenispengeluaran,
               "jumlahpengeluaran"       : jumlahpengeluaran,
               "isidatatable"    : isidatatable
@@ -444,6 +491,38 @@
   }
 
 
+  $('#kodeakun').change(function() {
+    var kodeakun = $(this).val();
+    $.ajax({
+      url: '<?php echo site_url("pengeluaran/get_hargajual_ma") ?>',
+      type: 'GET',
+      dataType: 'json',
+      data: {'kodeakun': kodeakun},
+    })
+    .done(function(resulthargajual) {      
+      $('#hargajual').val(numberWithCommas(resulthargajual));
+    })
+    .fail(function() {
+      console.log("error get_hargajual_ma");
+    });
+
+    $.ajax({
+      url: '<?php echo site_url("pengeluaran/get_jumlahpersediaan") ?>',
+      type: 'GET',
+      dataType: 'json',
+      data: {'kodeakun': kodeakun},
+    })
+    .done(function(resultjumlahpersediaan) {      
+      $('#jumlahpersediaan').val(resultjumlahpersediaan);
+      $('#lbljumlahpersediaan').html(numberWithCommas(resultjumlahpersediaan));
+    })
+    .fail(function() {
+      console.log("error get_hargajual_ma");
+      $('#jumlahpersediaan').val(0);
+      $('#lbljumlahpersediaan').html('0');
+    });
+    
+  });
 </script>
 
 

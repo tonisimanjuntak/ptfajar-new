@@ -157,6 +157,10 @@ class Penerimaan extends MY_Controller {
             exit();
         }               
 
+        if ($idgudang=='') {
+            $idgudang = null;
+        }
+        
         if ($idpenerimaan=='') {
             
             $idpenerimaan = $this->db->query("select create_idpenerimaan('".date('Y-m-d')."') as idpenerimaan ")->row()->idpenerimaan;

@@ -9,8 +9,8 @@ class Pengeluaran_model extends CI_Model {
     var $tabel     = 'pengeluaran';
     var $idpengeluaran = 'idpengeluaran';
 
-    var $column_order = array(null,'tglpengeluaran','deskripsi','jenispengeluaran','jumlahpengeluaran', null );
-    var $column_search = array('tglpengeluaran','deskripsi','jenispengeluaran','jumlahpengeluaran');
+    var $column_order = array(null,'tglpengeluaran','deskripsi', 'namagudang','jenispengeluaran','jumlahpengeluaran', null );
+    var $column_search = array('tglpengeluaran','deskripsi', 'namagudang','jenispengeluaran','jumlahpengeluaran');
     var $order = array('idpengeluaran' => 'desc'); // default order 
 
     // ----------------------------

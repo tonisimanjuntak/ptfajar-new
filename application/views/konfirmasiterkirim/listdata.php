@@ -6,12 +6,12 @@
 
   <div class="row" id="toni-breadcrumb">
     <div class="col-6">
-        <h4 class="text-dark mt-2">Pengeluaran</h4>
+        <h4 class="text-dark mt-2">Konfirmasi Barang Terkirim</h4>
     </div>  
     <div class="col-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="<?php echo(site_url()) ?>">Home</a></li>
-        <li class="breadcrumb-item active">Pengeluaran</li>
+        <li class="breadcrumb-item active">Konfirmasi Barang Terkirim</li>
       </ol>
       
     </div>
@@ -22,8 +22,7 @@
     <div class="col-md-12">
       <div class="card" id="cardcontent">
         <div class="card-header">
-          <h5 class="card-title">List Data Pengeluaran</h5>
-          <a href="<?php echo(site_url('pengeluaran/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
+          <h5 class="card-title">List Data Konfirmasi Barang Terkirim</h5>
         </div>
         <div class="card-body">
           <div class="row">
@@ -37,8 +36,8 @@
                       <th style="text-align: center;">Tgl /<br>ID Pengeluaran</th>
                       <th style="text-align: center;">Deskripsi</th>
                       <th style="text-align: center;">Nama Gudang</th>
-                      <th style="text-align: center;">Jenis Pengeluaran</th>
                       <th style="text-align: center;">Total Pengeluaran</th>
+                      <th style="text-align: center;">Status Terkirim</th>
                       <th style="text-align: center; width: 15%;">Aksi</th>
                     </tr>
                   </thead>
@@ -77,7 +76,7 @@
         "serverSide": true, 
         "order": [], 
          "ajax": {
-            "url": "<?php echo site_url('pengeluaran/datatablesource')?>",
+            "url": "<?php echo site_url('konfirmasiterkirim/datatablesource')?>",
             "type": "POST"
         },
         "columnDefs": [

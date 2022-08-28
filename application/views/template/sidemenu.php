@@ -100,7 +100,7 @@
           
 
           <?php  
-            $menudropdown = array("penerimaan", "pengeluaran", "lappenerimaan", "lappengeluaran", "stokopname", "kartustok");
+            $menudropdown = array("penerimaan", "pengeluaran", "lappenerimaan", "lappengeluaran", "stokopname", "kartustok", "konfirmasiterkirim");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{

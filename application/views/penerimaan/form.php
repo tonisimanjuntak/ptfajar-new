@@ -45,6 +45,15 @@
                     </div>
                   </div>
                   <div class="form-group row required">
+                    <label for="" class="col-md-2 col-form-label">Jenis Penerimaan</label>
+                    <div class="col-md-10">
+                      <select name="jenispenerimaan" id="jenispenerimaan" class="form-control">
+                        <option value="Pembelian">Pembelian</option>
+                        <option value="Barang Masuk">Barang Masuk</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row required" id="dividgudang">
                     <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
                     <div class="col-md-10">
                       <select name="idgudang" id="idgudang" class="form-control select2">
@@ -64,16 +73,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="form-group row required">
-                    <label for="" class="col-md-2 col-form-label">Jenis Penerimaan</label>
-                    <div class="col-md-10">
-                      <select name="jenispenerimaan" id="jenispenerimaan" class="form-control">
-                        <option value="">Pilih jenis penerimaan...</option>
-                        <option value="Pembelian">Pembelian</option>
-                        <option value="Barang Masuk">Barang Masuk</option>
-                      </select>
-                    </div>
-                  </div>
+                  
 
                   <div class="col-md-12">
                     <div class="card">
@@ -188,7 +188,7 @@
   $(document).ready(function() {
 
     $('.select2').select2();
-    
+    $('#dividgudang').hide();
 
     table = $('#table').DataTable({ 
         "select": true,
@@ -265,6 +265,9 @@
             $('#deskripsi').val(result.deskripsi);
             $('#idgudang').val(result.idgudang).trigger('change');
             $('#jenispenerimaan').val(result.jenispenerimaan);
+            if (result.jenispenerimaan=='Barang Masuk') {
+              $('#dividgudang').show();
+            }
           }); 
           
           $('#lbljudul').html('Edit Data Penerimaan');
@@ -372,7 +375,17 @@
   }); //end (document).ready
   
 
-  
+  $('#jenispenerimaan').change(function() {
+    var jenispenerimaan = $(this).val();
+    if (jenispenerimaan=='Barang Masuk') {
+      $('#dividgudang').show();
+    }else{
+      $('#dividgudang').hide();
+      $('#idgudang').val("").trigger('change');
+    }
+  });
+
+
   $('#simpan').click(function(){
     var idpenerimaan       = $("#idpenerimaan").val();
     var tglpenerimaan       = $("#tglpenerimaan").val();
@@ -389,12 +402,12 @@
         swal("Deskripsi!", "Deskripsi tidak boleh kosong.", "info");
         return; 
       }
-      if (idgudang=='') {
-        swal("Nama gudang!", "Nama gudang tidak boleh kosong.", "info");
-        return; 
-      }
       if (jenispenerimaan=='') {
         swal("Jenis Penerimaan!", "Jenis penerimaan tidak boleh kosong.", "info");
+        return; 
+      }
+      if (jenispenerimaan=='Barang Masuk' && idgudang=='') {
+        swal("Nama gudang!", "Nama gudang tidak boleh kosong.", "info");
         return; 
       }
       if (jumlahpenerimaan=='') {

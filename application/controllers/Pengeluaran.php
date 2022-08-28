@@ -26,13 +26,20 @@ class Pengeluaran extends MY_Controller {
     public function edit($idpengeluaran)
     {       
         $idpengeluaran = $this->encrypt->decode($idpengeluaran);
-
-        if ($this->Pengeluaran_model->get_by_id($idpengeluaran)->num_rows()<1) {
+        $rspengeluaran = $this->Pengeluaran_model->get_by_id($idpengeluaran);
+        if ($rspengeluaran->num_rows()<1) {
             $pesan = '<script>swal("Ilegal!", "Data tidak ditemukan.", "error")</script>';
             $this->session->set_flashdata('pesan', $pesan);
             redirect('pengeluaran');
             exit();
         };
+        $statusterkirim = $rspengeluaran->row()->statusterkirim;
+        if ($statusterkirim=='Sudah Terkirim') {
+           $pesan = '<script>swal("Upss!", "Barang ini sudah terkirim tidak dapat diedit lagi.", "error")</script>';
+            $this->session->set_flashdata('pesan', $pesan);
+            redirect('pengeluaran');
+            exit(); 
+        }
         $data['idpengeluaran'] = $idpengeluaran;      
         $data['menu'] = 'pengeluaran';
         $this->load->view('pengeluaran/form', $data);
@@ -51,6 +58,7 @@ class Pengeluaran extends MY_Controller {
                 $row[] = $no;
                 $row[] = tglindonesia($rowdata->tglpengeluaran).'<br>'.$rowdata->idpengeluaran;
                 $row[] = $rowdata->deskripsi;
+                $row[] = $rowdata->namagudang;
                 $row[] = $rowdata->jenispengeluaran;
                 $row[] = 'Rp. '.format_rupiah($rowdata->jumlahpengeluaran);
 
@@ -119,13 +127,21 @@ class Pengeluaran extends MY_Controller {
     public function delete($idpengeluaran)
     {
         $idpengeluaran = $this->encrypt->decode($idpengeluaran);  
-
-        if ($this->Pengeluaran_model->get_by_id($idpengeluaran)->num_rows()<1) {
+        $rspengeluaran = $this->Pengeluaran_model->get_by_id($idpengeluaran);
+        if ($rspengeluaran->num_rows()<1) {
             $pesan = '<script>swal("Gagal!", "Data tidak ditemukan.", "error")</script>';
             $this->session->set_flashdata('pesan', $pesan);
             redirect('pengeluaran');
             exit();
         };
+
+        $statusterkirim = $rspengeluaran->row()->statusterkirim;
+        if ($statusterkirim=='Sudah Terkirim') {
+           $pesan = '<script>swal("Upss!", "Barang ini sudah terkirim tidak dapat dihapus lagi.", "error")</script>';
+            $this->session->set_flashdata('pesan', $pesan);
+            redirect('pengeluaran');
+            exit(); 
+        }
 
         $hapus = $this->Pengeluaran_model->hapus($idpengeluaran);
         if ($hapus) {       
@@ -146,6 +162,7 @@ class Pengeluaran extends MY_Controller {
         $idpengeluaran           = $this->input->post('idpengeluaran');
         $tglpengeluaran           = $this->input->post('tglpengeluaran');
         $deskripsi           = $this->input->post('deskripsi');
+        $idgudang           = $this->input->post('idgudang');
         $jenispengeluaran           = $this->input->post('jenispengeluaran');
         $jumlahpengeluaran           = untitik($this->input->post('jumlahpengeluaran'));
         $created_at           = date('Y-m-d H:i:s');
@@ -158,6 +175,13 @@ class Pengeluaran extends MY_Controller {
             exit();
         }               
 
+        if ($idgudang=='') {
+            $idgudang = null;
+        }
+
+        $statusterkirim = 'Belum Terkirim';
+
+
         if ($idpengeluaran=='') {
             
             $idpengeluaran = $this->db->query("select create_idpengeluaran('".date('Y-m-d')."') as idpengeluaran ")->row()->idpengeluaran;
@@ -166,11 +190,13 @@ class Pengeluaran extends MY_Controller {
                                 'idpengeluaran' => $idpengeluaran,
                                 'tglpengeluaran' => $tglpengeluaran,
                                 'deskripsi' => $deskripsi,
+                                'idgudang' => $idgudang,
                                 'jenispengeluaran' => $jenispengeluaran,
                                 'jumlahpengeluaran' => $jumlahpengeluaran,
                                 'created_at' => $created_at,
                                 'updated_at' => $updated_at,
                                 'idpengguna' => $idpengguna,
+                                'statusterkirim' => $statusterkirim,
                                 );
 
             //-------------------------------- >> simpan dari datatable 
@@ -204,10 +230,12 @@ class Pengeluaran extends MY_Controller {
             $arrayhead = array(
                                 'tglpengeluaran' => $tglpengeluaran,
                                 'deskripsi' => $deskripsi,
+                                'idgudang' => $idgudang,
                                 'jenispengeluaran' => $jenispengeluaran,
                                 'jumlahpengeluaran' => $jumlahpengeluaran,
                                 'updated_at' => $updated_at,
                                 'idpengguna' => $idpengguna,
+                                'statusterkirim' => $statusterkirim,
                                 );
 
             //-------------------------------- >> simpan dari datatable 
@@ -257,6 +285,7 @@ class Pengeluaran extends MY_Controller {
                     'idpengeluaran'     =>  $RsData->idpengeluaran,
                     'tglpengeluaran'     =>  $RsData->tglpengeluaran,
                     'deskripsi'     =>  $RsData->deskripsi,
+                    'idgudang'     =>  $RsData->idgudang,
                     'jenispengeluaran'     =>  $RsData->jenispengeluaran,
                     'jumlahpengeluaran'     =>  $RsData->jumlahpengeluaran,
                     'created_at'     =>  $RsData->created_at,
@@ -266,6 +295,21 @@ class Pengeluaran extends MY_Controller {
         echo(json_encode($data));
     }
 
+
+    public function get_hargajual_ma()
+    {
+        $kodeakun = $this->input->get('kodeakun');
+        $tahun = date('Y');
+        $hargajual = $this->App->get_hargajual_ma($kodeakun, $tahun);
+        echo json_encode($hargajual);
+    }
+
+    public function get_jumlahpersediaan()
+    {
+        $kodeakun = $this->input->get('kodeakun');
+        $jumlahpersediaan = $this->db->query("select jumlahpersediaan from akun where kodeakun='$kodeakun'")->row()->jumlahpersediaan;
+        echo json_encode($jumlahpersediaan);
+    }
 }
 
 /* End of file Pengeluaran.php */
