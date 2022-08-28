@@ -9,8 +9,8 @@ class Jurnalpenerimaan_model extends CI_Model {
     var $tabel     = 'jurnalpenerimaan';
     var $idjurnalpenerimaan = 'idjurnalpenerimaan';
 
-    var $column_order = array(null,'tgljurnalpenerimaan','deskripsi','idsupplier','jenispenerimaan','jenistransaksi','jumlahpenerimaan','created_at','updated_at','idpengguna' );
-    var $column_search = array('tgljurnalpenerimaan','deskripsi','idsupplier','jenispenerimaan','jenistransaksi','jumlahpenerimaan','created_at','updated_at','idpengguna');
+    var $column_order = array(null,'tgljurnalpenerimaan','deskripsi','idgudang','jenispenerimaan','jenistransaksi','jumlahpenerimaan','created_at','updated_at','idpengguna' );
+    var $column_search = array('tgljurnalpenerimaan','deskripsi','idgudang','jenispenerimaan','jenistransaksi','jumlahpenerimaan','created_at','updated_at','idpengguna');
     var $order = array('idjurnalpenerimaan' => 'desc'); // default order 
 
     // ----------------------------

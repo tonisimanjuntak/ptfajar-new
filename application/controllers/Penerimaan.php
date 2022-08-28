@@ -51,7 +51,7 @@ class Penerimaan extends MY_Controller {
                 $row[] = $no;
                 $row[] = tglindonesia($rowdata->tglpenerimaan).'<br>'.$rowdata->idpenerimaan;
                 $row[] = $rowdata->deskripsi;
-                $row[] = $rowdata->namasupplier;
+                $row[] = $rowdata->namagudang;
                 $row[] = $rowdata->jenispenerimaan;
                 $row[] = 'Rp. '.format_rupiah($rowdata->jumlahpenerimaan);
                 $row[] = '
@@ -144,7 +144,7 @@ class Penerimaan extends MY_Controller {
         $idpenerimaan           = $this->input->post('idpenerimaan');
         $tglpenerimaan           = $this->input->post('tglpenerimaan');
         $deskripsi           = $this->input->post('deskripsi');
-        $idsupplier           = $this->input->post('idsupplier');
+        $idgudang           = $this->input->post('idgudang');
         $jenispenerimaan           = $this->input->post('jenispenerimaan');
         $jumlahpenerimaan           = untitik($this->input->post('jumlahpenerimaan'));
         $created_at           = date('Y-m-d H:i:s');
@@ -165,7 +165,7 @@ class Penerimaan extends MY_Controller {
                                 'idpenerimaan' => $idpenerimaan,
                                 'tglpenerimaan' => $tglpenerimaan,
                                 'deskripsi' => $deskripsi,
-                                'idsupplier' => $idsupplier,
+                                'idgudang' => $idgudang,
                                 'jenispenerimaan' => $jenispenerimaan,
                                 'jumlahpenerimaan' => $jumlahpenerimaan,
                                 'created_at' => $created_at,
@@ -204,7 +204,7 @@ class Penerimaan extends MY_Controller {
             $arrayhead = array(
                                 'tglpenerimaan' => $tglpenerimaan,
                                 'deskripsi' => $deskripsi,
-                                'idsupplier' => $idsupplier,
+                                'idgudang' => $idgudang,
                                 'jenispenerimaan' => $jenispenerimaan,
                                 'jumlahpenerimaan' => $jumlahpenerimaan,
                                 'updated_at' => $updated_at,
@@ -258,7 +258,7 @@ class Penerimaan extends MY_Controller {
                     'idpenerimaan'     =>  $RsData->idpenerimaan,
                     'tglpenerimaan'     =>  $RsData->tglpenerimaan,
                     'deskripsi'     =>  $RsData->deskripsi,
-                    'idsupplier'     =>  $RsData->idsupplier,
+                    'idgudang'     =>  $RsData->idgudang,
                     'jenispenerimaan'     =>  $RsData->jenispenerimaan,
                     'jumlahpenerimaan'     =>  $RsData->jumlahpenerimaan,
                     'created_at'     =>  $RsData->created_at,

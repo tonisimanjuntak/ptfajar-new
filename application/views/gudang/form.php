@@ -12,7 +12,7 @@
     <div class="col-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="<?php echo(site_url()) ?>">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?php echo(site_url('supplier')) ?>">Gudang</a></li>
+        <li class="breadcrumb-item"><a href="<?php echo(site_url('gudang')) ?>">Gudang</a></li>
         <li class="breadcrumb-item active" id="lblactive"></li>
       </ol>
       
@@ -21,7 +21,7 @@
 
   <div class="row" id="toni-content">
     <div class="col-md-12">
-      <form action="<?php echo(site_url('supplier/simpan')) ?>" method="post" id="form">                      
+      <form action="<?php echo(site_url('gudang/simpan')) ?>" method="post" id="form">                      
         <div class="row">
           <div class="col-md-12">
             <div class="card" id="cardcontent">
@@ -31,29 +31,29 @@
               <div class="card-body">
 
 
-                  <input type="hidden" name="idsupplier" id="idsupplier">                      
+                  <input type="hidden" name="idgudang" id="idgudang">                      
                   <div class="form-group row required">
                     <label for="" class="col-md-3 col-form-label">Nama Gudang</label>
                     <div class="col-md-9">
-                      <input type="text" name="namasupplier" id="namasupplier" class="form-control" placeholder="Masukkan nama gudang">
+                      <input type="text" name="namagudang" id="namagudang" class="form-control" placeholder="Masukkan nama gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
                     <label for="" class="col-md-3 col-form-label">Alamat Gudang</label>
                     <div class="col-md-9">
-                      <textarea name="alamatsupplier" id="alamatsupplier" class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
+                      <textarea name="alamatgudang" id="alamatgudang" class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
                     </div>
                   </div>                      
                   <div class="form-group row required">
                     <label for="" class="col-md-3 col-form-label">No. Telp</label>
                     <div class="col-md-9">
-                      <input type="text" name="notelpsupplier" id="notelpsupplier" class="form-control" placeholder="Masukkan nomor telpon gudang">
+                      <input type="text" name="notelpgudang" id="notelpgudang" class="form-control" placeholder="Masukkan nomor telpon gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
                     <label for="" class="col-md-3 col-form-label">Email Gudang</label>
                     <div class="col-md-9">
-                      <input type="text" name="emailsupplier" id="emailsupplier" class="form-control" placeholder="Masukkan email gudang">
+                      <input type="text" name="emailgudang" id="emailgudang" class="form-control" placeholder="Masukkan email gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
@@ -69,7 +69,7 @@
 
               <div class="card-footer">
                 <button type="submit" class="btn btn-primary float-right"><i class="fa fa-save"></i> Simpan</button>
-                <a href="<?php echo(site_url('supplier')) ?>" class="btn btn-default float-right mr-1 ml-1"><i class="fa fa-chevron-circle-left"></i> Kembali</a>
+                <a href="<?php echo(site_url('gudang')) ?>" class="btn btn-default float-right mr-1 ml-1"><i class="fa fa-chevron-circle-left"></i> Kembali</a>
               </div>
             </div> <!-- /.card -->
           </div> <!-- /.col -->
@@ -87,27 +87,27 @@
 
 <script type="text/javascript">
   
-  var idsupplier = "<?php echo($idsupplier) ?>";
+  var idgudang = "<?php echo($idgudang) ?>";
 
   $(document).ready(function() {
 
     $('.select2').select2();
 
     //---------------------------------------------------------> JIKA EDIT DATA
-    if ( idsupplier != "" ) { 
+    if ( idgudang != "" ) { 
           $.ajax({
               type        : 'POST', 
-              url         : '<?php echo site_url("supplier/get_edit_data") ?>', 
-              data        : {idsupplier: idsupplier}, 
+              url         : '<?php echo site_url("gudang/get_edit_data") ?>', 
+              data        : {idgudang: idgudang}, 
               dataType    : 'json', 
               encode      : true
           })      
           .done(function(result) {
-            $("#idsupplier").val(result.idsupplier);
-            $("#namasupplier").val(result.namasupplier);
-            $("#alamatsupplier").val(result.alamatsupplier);
-            $("#notelpsupplier").val(result.notelpsupplier);
-            $("#emailsupplier").val(result.emailsupplier);
+            $("#idgudang").val(result.idgudang);
+            $("#namagudang").val(result.namagudang);
+            $("#alamatgudang").val(result.alamatgudang);
+            $("#notelpgudang").val(result.notelpgudang);
+            $("#emailgudang").val(result.emailgudang);
             $("#statusaktif").val(result.statusaktif);
           }); 
 
@@ -128,31 +128,31 @@
         validating: 'glyphicon glyphicon-refresh'
       },
       fields: {
-        namasupplier: {
+        namagudang: {
           validators:{
             notEmpty: {
-                message: "nama supplier tidak boleh kosong"
+                message: "nama gudang tidak boleh kosong"
             },
           }
         },
-        alamatsupplier: {
+        alamatgudang: {
           validators:{
             notEmpty: {
-                message: "alamat supplier tidak boleh kosong"
+                message: "alamat gudang tidak boleh kosong"
             },
           }
         },
-        notelpsupplier: {
+        notelpgudang: {
           validators:{
             notEmpty: {
-                message: "no telp supplier tidak boleh kosong"
+                message: "no telp gudang tidak boleh kosong"
             },
           }
         },
-        emailsupplier: {
+        emailgudang: {
           validators:{
             notEmpty: {
-                message: "email supplier tidak boleh kosong"
+                message: "email gudang tidak boleh kosong"
             },
           }
         },

@@ -9,8 +9,8 @@ class Penerimaan_model extends CI_Model {
     var $tabel     = 'penerimaan';
     var $idpenerimaan = 'idpenerimaan';
 
-    var $column_order = array(null,'tglpenerimaan','deskripsi','namasupplier','jenispenerimaan','jumlahpenerimaan', null );
-    var $column_search = array('tglpenerimaan','deskripsi','namasupplier','jenispenerimaan','jumlahpenerimaan');
+    var $column_order = array(null,'tglpenerimaan','deskripsi','namagudang','jenispenerimaan','jumlahpenerimaan', null );
+    var $column_search = array('tglpenerimaan','deskripsi','namagudang','jenispenerimaan','jumlahpenerimaan');
     var $order = array('idpenerimaan' => 'desc'); // default order 
 
     // ----------------------------

@@ -54,9 +54,9 @@
                     </div>
                   </div>
                   <div class="form-group row required">
-                    <label for="" class="col-md-2 col-form-label">idsupplier</label>
+                    <label for="" class="col-md-2 col-form-label">idgudang</label>
                     <div class="col-md-10">
-                      <input type="text" name="idsupplier" id="idsupplier" class="form-control" placeholder="Masukkan idsupplier">
+                      <input type="text" name="idgudang" id="idgudang" class="form-control" placeholder="Masukkan idgudang">
                     </div>
                   </div>
                   <div class="form-group row required">
@@ -285,7 +285,7 @@
             $('#idjurnalpenerimaan').val(result.idjurnalpenerimaan);
             $('#tgljurnalpenerimaan').val(result.tgljurnalpenerimaan);
             $('#deskripsi').val(result.deskripsi);
-            $('#idsupplier').val(result.idsupplier);
+            $('#idgudang').val(result.idgudang);
             $('#jenispenerimaan').val(result.jenispenerimaan);
             $('#jenistransaksi').val(result.jenistransaksi);
             $('#jumlahpenerimaan').val(result.jumlahpenerimaan);
@@ -434,7 +434,7 @@
     var idjurnalpenerimaan       = $("#idjurnalpenerimaan").val();
     var tgljurnalpenerimaan       = $("#tgljurnalpenerimaan").val();
     var deskripsi       = $("#deskripsi").val();
-    var idsupplier       = $("#idsupplier").val();
+    var idgudang       = $("#idgudang").val();
     var jenispenerimaan       = $("#jenispenerimaan").val();
     var jenistransaksi       = $("#jenistransaksi").val();
     var jumlahpenerimaan       = $("#jumlahpenerimaan").val();
@@ -453,8 +453,8 @@
         alert("deskripsi tidak boleh kosong!!");
         return; 
       }
-      if (idsupplier=='') {
-        alert("idsupplier tidak boleh kosong!!");
+      if (idgudang=='') {
+        alert("idgudang tidak boleh kosong!!");
         return; 
       }
       if (jenispenerimaan=='') {
@@ -492,7 +492,7 @@
               "idjurnalpenerimaan"       : idjurnalpenerimaan,
               "tgljurnalpenerimaan"       : tgljurnalpenerimaan,
               "deskripsi"       : deskripsi,
-              "idsupplier"       : idsupplier,
+              "idgudang"       : idgudang,
               "jenispenerimaan"       : jenispenerimaan,
               "jenistransaksi"       : jenistransaksi,
               "jumlahpenerimaan"       : jumlahpenerimaan,

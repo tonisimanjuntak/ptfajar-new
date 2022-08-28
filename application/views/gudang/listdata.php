@@ -22,7 +22,7 @@
       <div class="card" id="cardcontent">
         <div class="card-header">
           <h5 class="card-title">List Data Gudang</h5>
-          <a href="<?php echo(site_url('supplier/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
+          <a href="<?php echo(site_url('gudang/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
         </div>
         <div class="card-body">
           <div class="row">
@@ -77,7 +77,7 @@
         "serverSide": true, 
         "order": [], 
          "ajax": {
-            "url": "<?php echo site_url('supplier/datatablesource')?>",
+            "url": "<?php echo site_url('gudang/datatablesource')?>",
             "type": "POST"
         },
         "columnDefs": [

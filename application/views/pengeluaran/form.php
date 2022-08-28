@@ -244,7 +244,7 @@
             $('#idpengeluaran').val(result.idpengeluaran);
             $('#tglpengeluaran').val(result.tglpengeluaran);
             $('#deskripsi').val(result.deskripsi);
-            $('#idsupplier').val(result.idsupplier).trigger('change');
+            $('#idgudang').val(result.idgudang).trigger('change');
             $('#jenispengeluaran').val(result.jenispengeluaran);
           }); 
           

@@ -36,7 +36,7 @@
           </li>
 
           <?php  
-            $menudropdown = array("pengguna", "akun", "penandatangan", "pengaturan", "supplier");
+            $menudropdown = array("pengguna", "akun", "penandatangan", "pengaturan", "gudang");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{
@@ -87,7 +87,7 @@
               
                   
                   <li class="nav-item">
-                    <a href="<?php echo(site_url("supplier")) ?>" class="nav-link <?php echo ($menu=='supplier') ? 'active' : '' ?>">
+                    <a href="<?php echo(site_url("gudang")) ?>" class="nav-link <?php echo ($menu=='gudang') ? 'active' : '' ?>">
                       <i class="fa fa-circle-notch nav-icon"></i>
                       <p>Gudang</p>
                     </a>

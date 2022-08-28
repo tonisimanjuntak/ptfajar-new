@@ -44,7 +44,7 @@
                       <th style="width: 5%; text-align: center;">No</th>
                       <th style="text-align: center;">tgljurnalpenerimaan</th>
                       <th style="text-align: center;">deskripsi</th>
-                      <th style="text-align: center;">idsupplier</th>
+                      <th style="text-align: center;">idgudang</th>
                       <th style="text-align: center;">jenispenerimaan</th>
                       <th style="text-align: center;">jenistransaksi</th>
                       <th style="text-align: center;">jumlahpenerimaan</th>

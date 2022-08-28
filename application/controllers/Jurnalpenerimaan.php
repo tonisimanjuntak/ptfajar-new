@@ -56,7 +56,7 @@ class Jurnalpenerimaan extends MY_Controller {
                 $row[] = $no;
                 $row[] = $rowdata->tgljurnalpenerimaan;
                 $row[] = $rowdata->deskripsi;
-                $row[] = $rowdata->idsupplier;
+                $row[] = $rowdata->idgudang;
                 $row[] = $rowdata->jenispenerimaan;
                 $row[] = $rowdata->jenistransaksi;
                 $row[] = $rowdata->jumlahpenerimaan;
@@ -160,7 +160,7 @@ class Jurnalpenerimaan extends MY_Controller {
         $idjurnalpenerimaan           = $this->input->post('idjurnalpenerimaan');
         $tgljurnalpenerimaan           = $this->input->post('tgljurnalpenerimaan');
         $deskripsi           = $this->input->post('deskripsi');
-        $idsupplier           = $this->input->post('idsupplier');
+        $idgudang           = $this->input->post('idgudang');
         $jenispenerimaan           = $this->input->post('jenispenerimaan');
         $jenistransaksi           = $this->input->post('jenistransaksi');
         $jumlahpenerimaan           = $this->input->post('jumlahpenerimaan');
@@ -181,7 +181,7 @@ class Jurnalpenerimaan extends MY_Controller {
                                 'idjurnalpenerimaan' => $idjurnalpenerimaan,
                                 'tgljurnalpenerimaan' => $tgljurnalpenerimaan,
                                 'deskripsi' => $deskripsi,
-                                'idsupplier' => $idsupplier,
+                                'idgudang' => $idgudang,
                                 'jenispenerimaan' => $jenispenerimaan,
                                 'jenistransaksi' => $jenistransaksi,
                                 'jumlahpenerimaan' => $jumlahpenerimaan,
@@ -222,7 +222,7 @@ class Jurnalpenerimaan extends MY_Controller {
                                 'idjurnalpenerimaan' => $idjurnalpenerimaan,
                                 'tgljurnalpenerimaan' => $tgljurnalpenerimaan,
                                 'deskripsi' => $deskripsi,
-                                'idsupplier' => $idsupplier,
+                                'idgudang' => $idgudang,
                                 'jenispenerimaan' => $jenispenerimaan,
                                 'jenistransaksi' => $jenistransaksi,
                                 'jumlahpenerimaan' => $jumlahpenerimaan,
@@ -279,7 +279,7 @@ class Jurnalpenerimaan extends MY_Controller {
                     'idjurnalpenerimaan'     =>  $RsData->idjurnalpenerimaan,
                     'tgljurnalpenerimaan'     =>  $RsData->tgljurnalpenerimaan,
                     'deskripsi'     =>  $RsData->deskripsi,
-                    'idsupplier'     =>  $RsData->idsupplier,
+                    'idgudang'     =>  $RsData->idgudang,
                     'jenispenerimaan'     =>  $RsData->jenispenerimaan,
                     'jenistransaksi'     =>  $RsData->jenistransaksi,
                     'jumlahpenerimaan'     =>  $RsData->jumlahpenerimaan,

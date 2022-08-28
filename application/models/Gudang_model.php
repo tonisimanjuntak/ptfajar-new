@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Supplier_model extends CI_Model {
+class Gudang_model extends CI_Model {
 
-    var $tabelview = 'supplier';
-    var $tabel     = 'supplier';
-    var $idsupplier = 'idsupplier';
+    var $tabelview = 'gudang';
+    var $tabel     = 'gudang';
+    var $idgudang = 'idgudang';
 
-    var $column_order = array(null,'namasupplier','alamatsupplier','notelpsupplier','statusaktif' );
-    var $column_search = array('namasupplier','alamatsupplier','notelpsupplier','emailsupplier','statusaktif');
-    var $order = array('idsupplier' => 'desc'); // default order 
+    var $column_order = array(null,'namagudang','alamatgudang','notelpgudang','statusaktif' );
+    var $column_search = array('namagudang','alamatgudang','notelpgudang','emailgudang','statusaktif');
+    var $order = array('idgudang' => 'desc'); // default order 
 
 
     function get_datatables()
@@ -69,15 +69,15 @@ class Supplier_model extends CI_Model {
         return $this->db->get($this->tabelview);
     }
 
-    public function get_by_id($idsupplier)
+    public function get_by_id($idgudang)
     {
-        $this->db->where('idsupplier', $idsupplier);
+        $this->db->where('idgudang', $idgudang);
         return $this->db->get($this->tabelview);
     }
 
-    public function hapus($idsupplier)
+    public function hapus($idgudang)
     {
-        $this->db->where('idsupplier', $idsupplier);      
+        $this->db->where('idgudang', $idgudang);      
         return $this->db->delete($this->tabel);
     }
 
@@ -86,13 +86,13 @@ class Supplier_model extends CI_Model {
         return $this->db->insert($this->tabel, $data);
     }
 
-    public function update($data, $idsupplier)
+    public function update($data, $idgudang)
     {
-        $this->db->where('idsupplier', $idsupplier);
+        $this->db->where('idgudang', $idgudang);
         return $this->db->update($this->tabel, $data);
     }
 
 }
 
-/* End of file Supplier_model.php */
-/* Location: ./application/models/Supplier_model.php */
+/* End of file Gudang_model.php */
+/* Location: ./application/models/Gudang_model.php */

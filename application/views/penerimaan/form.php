@@ -47,16 +47,16 @@
                   <div class="form-group row required">
                     <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
                     <div class="col-md-10">
-                      <select name="idsupplier" id="idsupplier" class="form-control select2">
+                      <select name="idgudang" id="idgudang" class="form-control select2">
                         <option value="">Pilih nama gudang</option>
                         <?php  
-                          $rssupplier = $this->db->query("
-                                select * from supplier where statusaktif = 'Aktif' order by namasupplier
+                          $rsgudang = $this->db->query("
+                                select * from gudang where statusaktif = 'Aktif' order by namagudang
                             ");
-                          if ($rssupplier->num_rows()>0) {
-                            foreach ($rssupplier->result() as $row) {
+                          if ($rsgudang->num_rows()>0) {
+                            foreach ($rsgudang->result() as $row) {
                               echo '
-                                  <option value="'.$row->idsupplier.'">'.$row->namasupplier.'</option>
+                                  <option value="'.$row->idgudang.'">'.$row->namagudang.'</option>
                               ';
                             }
                           }
@@ -263,7 +263,7 @@
             $('#idpenerimaan').val(result.idpenerimaan);
             $('#tglpenerimaan').val(result.tglpenerimaan);
             $('#deskripsi').val(result.deskripsi);
-            $('#idsupplier').val(result.idsupplier).trigger('change');
+            $('#idgudang').val(result.idgudang).trigger('change');
             $('#jenispenerimaan').val(result.jenispenerimaan);
           }); 
           
@@ -377,7 +377,7 @@
     var idpenerimaan       = $("#idpenerimaan").val();
     var tglpenerimaan       = $("#tglpenerimaan").val();
     var deskripsi       = $("#deskripsi").val();
-    var idsupplier       = $("#idsupplier").val();
+    var idgudang       = $("#idgudang").val();
     var jenispenerimaan       = $("#jenispenerimaan").val();
     var jumlahpenerimaan       = $("#total").val();
 
@@ -389,8 +389,8 @@
         swal("Deskripsi!", "Deskripsi tidak boleh kosong.", "info");
         return; 
       }
-      if (idsupplier=='') {
-        swal("Nama Supplier!", "Nama supplier tidak boleh kosong.", "info");
+      if (idgudang=='') {
+        swal("Nama gudang!", "Nama gudang tidak boleh kosong.", "info");
         return; 
       }
       if (jenispenerimaan=='') {
@@ -413,7 +413,7 @@
               "idpenerimaan"       : idpenerimaan,
               "tglpenerimaan"       : tglpenerimaan,
               "deskripsi"       : deskripsi,
-              "idsupplier"       : idsupplier,
+              "idgudang"       : idgudang,
               "jenispenerimaan"       : jenispenerimaan,
               "jumlahpenerimaan"       : jumlahpenerimaan,
               "isidatatable"    : isidatatable

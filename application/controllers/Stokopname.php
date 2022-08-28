@@ -151,10 +151,10 @@ class Stokopname extends MY_Controller {
 
         $data = array( 
                             'idstokopname'     =>  $RsData->idstokopname,  
-                            'namasupplier'     =>  $RsData->namasupplier,  
-                            'alamatsupplier'     =>  $RsData->alamatsupplier,  
-                            'notelpsupplier'     =>  $RsData->notelpsupplier,  
-                            'emailsupplier'     =>  $RsData->emailsupplier,  
+                            'namagudang'     =>  $RsData->namagudang,  
+                            'alamatgudang'     =>  $RsData->alamatgudang,  
+                            'notelpgudang'     =>  $RsData->notelpgudang,  
+                            'emailgudang'     =>  $RsData->emailgudang,  
                             'statusaktif'     =>  $RsData->statusaktif,  
                             'created_at'     =>  $RsData->created_at,  
                             'updated_at'     =>  $RsData->updated_at,  
