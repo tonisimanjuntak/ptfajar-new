@@ -84,15 +84,6 @@
                       <canvas id="visitors-chart" height="200"></canvas>
                     </div>
 
-                    <div class="d-flex flex-row justify-content-end">
-                      <span class="mr-2">
-                        <i class="fas fa-square text-primary"></i> Penjualan
-                      </span>
-
-                      <span>
-                        <i class="fas fa-square text-gray"></i> Rata-Rata
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
