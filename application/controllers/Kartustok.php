@@ -47,6 +47,7 @@ class Kartustok extends CI_Controller {
         $data['rowpengaturan'] = $rowpengaturan;
         $data['rowakun'] = $rowakun;
         $data['rskartustok'] = $rskartustok;
+        $data['kodeakun'] = $kodeakun;
         $data['tglawal'] = $tglawal;
         $data['tglakhir'] = $tglakhir;
         $data['tahunperiode'] = date('Y', strtotime($tglawal));

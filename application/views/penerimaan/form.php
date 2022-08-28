@@ -45,10 +45,10 @@
                     </div>
                   </div>
                   <div class="form-group row required">
-                    <label for="" class="col-md-2 col-form-label">Nama Supplier</label>
+                    <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
                     <div class="col-md-10">
                       <select name="idsupplier" id="idsupplier" class="form-control select2">
-                        <option value="">Pilih nama supplier</option>
+                        <option value="">Pilih nama gudang</option>
                         <?php  
                           $rssupplier = $this->db->query("
                                 select * from supplier where statusaktif = 'Aktif' order by namasupplier

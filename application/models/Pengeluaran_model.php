@@ -84,7 +84,7 @@ class Pengeluaran_model extends CI_Model {
     {
         $this->db->trans_begin();
 
-        $this->db->query('delete from pengeluarandetail where idpengeluaran="'.$idpengeluaran.'"');
+        $this->hapusDetail($idpengeluaran);        
         $this->db->where('idpengeluaran', $idpengeluaran);      
         $this->db->delete('pengeluaran');
 
@@ -101,10 +101,8 @@ class Pengeluaran_model extends CI_Model {
     public function simpan($arrayhead, $arraydetail, $idpengeluaran)
     {       
         $this->db->trans_begin();
-
         $this->db->insert('pengeluaran', $arrayhead);
-        $this->db->query('delete from pengeluarandetail where idpengeluaran="'.$idpengeluaran.'"');
-        $this->db->insert_batch('pengeluarandetail', $arraydetail);
+        $this->simpanDetail($arraydetail, $arrayhead['tglpengeluaran']);
 
         if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();
@@ -120,9 +118,9 @@ class Pengeluaran_model extends CI_Model {
         $this->db->trans_begin();
         $this->db->where('idpengeluaran', $idpengeluaran);
         $this->db->update('pengeluaran', $arrayhead);
+        $this->hapusDetail($idpengeluaran);
+        $this->simpanDetail($arraydetail, $arrayhead['tglpengeluaran']);
 
-        $this->db->query('delete from pengeluarandetail where idpengeluaran="'.$idpengeluaran.'"');
-        $this->db->insert_batch('pengeluarandetail', $arraydetail);
 
         if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();
@@ -132,6 +130,95 @@ class Pengeluaran_model extends CI_Model {
                 return true;
         }
     }
+
+
+    public function hapusDetail($idpengeluaran)
+    {
+
+        $rowPengeluaran = $this->db->query("
+                select * from pengeluaran where idpengeluaran='".$idpengeluaran."'
+            ")->row();
+
+        $rsPengeluaranDetail = $this->db->query("
+                select * from pengeluarandetail where idpengeluaran='".$idpengeluaran."'
+            ");
+
+        if ($rsPengeluaranDetail->num_rows()>0) {
+            foreach ($rsPengeluaranDetail->result() as $row) {
+                
+                $this->db->query("
+                            delete from pengeluarandetail where idpengeluaran='".$idpengeluaran."' and kodeakun='".$row->kodeakun."' and jumlahbarang=".$row->jumlahbarang." 
+                            ");
+
+                //Kartu Stok
+                $stokawal = $this->App->get_stok_akhir($row->kodeakun);
+                $jumlahmasuk = $row->jumlahbarang;
+                $jumlahkeluar = 0;
+                $stokakhir = $stokawal + $jumlahmasuk - $jumlahkeluar;
+                $deskripsi = 'Pengeluaran Dihapus Oleh '.$this->session->userdata('namapengguna');
+
+                $idkartustok = $this->db->query("SELECT create_idkartustok('".date('Y-m-d')."') as idkartustok")->row()->idkartustok;
+                $dataKartuStok = array(
+                                            'idkartustok' => $idkartustok, 
+                                            'kodeakun' => $row->kodeakun, 
+                                            'tglinsert' => date('Y-m-d H:i:s'), 
+                                            'idtransaksi' => $row->idpengeluaran, 
+                                            'tgltransaksi' => $rowPengeluaran->tglpengeluaran, 
+                                            'jenistransaksi' => 'Pengeluaran', 
+                                            'aksi' => 'Delete', 
+                                            'stokawal' => $stokawal, 
+                                            'jumlahmasuk' => $jumlahmasuk, 
+                                            'jumlahkeluar' => $jumlahkeluar, 
+                                            'stokakhir' => $stokakhir,
+                                            'deskripsi' => $deskripsi
+                                        );
+                $this->db->insert('kartustok', $dataKartuStok);
+            }
+        }
+    }
+
+    public function simpanDetail($arraydetail, $tgltransaksi)
+    {
+
+        foreach ($arraydetail as $key => $row) {          
+            //pengeluaran Detail
+            
+            $dataPengeluarandetail= array(
+                                            'idpengeluaran' => $row['idpengeluaran'], 
+                                            'kodeakun' => $row['kodeakun'], 
+                                            'jumlahbarang' => $row['jumlahbarang'], 
+                                            'hargabeli' => $row['hargabeli'], 
+                                            'hargajual' => $row['hargajual'], 
+                                            'totalharga' => $row['totalharga']
+                                        );          
+            $this->db->insert('pengeluarandetail', $dataPengeluarandetail);
+
+            //Kartu Stok
+            $stokawal = $this->App->get_stok_akhir($row['kodeakun']);
+            $jumlahmasuk = 0;
+            $jumlahkeluar = $row['jumlahbarang'];
+            $stokakhir = $stokawal + $jumlahmasuk - $jumlahkeluar;
+            $deskripsi = 'Pengeluaran Ditambahkan Oleh '.$this->session->userdata('namapengguna');
+
+            $idkartustok = $this->db->query("SELECT create_idkartustok('".date('Y-m-d')."') as idkartustok")->row()->idkartustok;
+            $dataKartuStok = array(
+                                        'idkartustok' => $idkartustok, 
+                                        'kodeakun' => $row['kodeakun'], 
+                                        'tglinsert' => date('Y-m-d H:i:s'), 
+                                        'idtransaksi' => $row['idpengeluaran'], 
+                                        'tgltransaksi' => $tgltransaksi, 
+                                        'jenistransaksi' => 'Pengeluaran', 
+                                        'aksi' => 'Insert', 
+                                        'stokawal' => $stokawal, 
+                                        'jumlahmasuk' => $jumlahmasuk, 
+                                        'jumlahkeluar' => $jumlahkeluar, 
+                                        'stokakhir' => $stokakhir,
+                                        'deskripsi' => $deskripsi
+                                    );
+            $this->db->insert('kartustok', $dataKartuStok);
+        }
+    }
+
 
 }
 

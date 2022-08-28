@@ -89,7 +89,7 @@
                   <li class="nav-item">
                     <a href="<?php echo(site_url("supplier")) ?>" class="nav-link <?php echo ($menu=='supplier') ? 'active' : '' ?>">
                       <i class="fa fa-circle-notch nav-icon"></i>
-                      <p>Supplier</p>
+                      <p>Gudang</p>
                     </a>
                   </li>
                    
@@ -131,6 +131,13 @@
                     <a href="<?php echo(site_url("pengeluaran")) ?>" class="nav-link <?php echo ($menu=='pengeluaran') ? 'active' : '' ?>">
                       <i class="fa fa-circle-notch nav-icon"></i>
                       <p>Pengeluaran Barang</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="<?php echo(site_url("konfirmasiterkirim")) ?>" class="nav-link <?php echo ($menu=='konfirmasiterkirim') ? 'active' : '' ?>">
+                      <i class="fa fa-circle-notch nav-icon"></i>
+                      <p>Konfirmasi Barang Terkirim</p>
                     </a>
                   </li>
 

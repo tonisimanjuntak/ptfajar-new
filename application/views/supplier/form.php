@@ -7,12 +7,12 @@
 
 <div class="row" id="toni-breadcrumb">
     <div class="col-6">
-        <h4 class="text-dark mt-2">Supplier</h4>
+        <h4 class="text-dark mt-2">Gudang</h4>
     </div>  
     <div class="col-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="<?php echo(site_url()) ?>">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?php echo(site_url('supplier')) ?>">Supplier</a></li>
+        <li class="breadcrumb-item"><a href="<?php echo(site_url('supplier')) ?>">Gudang</a></li>
         <li class="breadcrumb-item active" id="lblactive"></li>
       </ol>
       
@@ -33,13 +33,13 @@
 
                   <input type="hidden" name="idsupplier" id="idsupplier">                      
                   <div class="form-group row required">
-                    <label for="" class="col-md-3 col-form-label">Nama Supplier</label>
+                    <label for="" class="col-md-3 col-form-label">Nama Gudang</label>
                     <div class="col-md-9">
-                      <input type="text" name="namasupplier" id="namasupplier" class="form-control" placeholder="Masukkan nama supplier">
+                      <input type="text" name="namasupplier" id="namasupplier" class="form-control" placeholder="Masukkan nama gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
-                    <label for="" class="col-md-3 col-form-label">Alamat Supplier</label>
+                    <label for="" class="col-md-3 col-form-label">Alamat Gudang</label>
                     <div class="col-md-9">
                       <textarea name="alamatsupplier" id="alamatsupplier" class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
                     </div>
@@ -47,13 +47,13 @@
                   <div class="form-group row required">
                     <label for="" class="col-md-3 col-form-label">No. Telp</label>
                     <div class="col-md-9">
-                      <input type="text" name="notelpsupplier" id="notelpsupplier" class="form-control" placeholder="Masukkan nomor telpon supplier">
+                      <input type="text" name="notelpsupplier" id="notelpsupplier" class="form-control" placeholder="Masukkan nomor telpon gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
-                    <label for="" class="col-md-3 col-form-label">Email Supplier</label>
+                    <label for="" class="col-md-3 col-form-label">Email Gudang</label>
                     <div class="col-md-9">
-                      <input type="text" name="emailsupplier" id="emailsupplier" class="form-control" placeholder="Masukkan email supplier">
+                      <input type="text" name="emailsupplier" id="emailsupplier" class="form-control" placeholder="Masukkan email gudang">
                     </div>
                   </div>                      
                   <div class="form-group row required">
@@ -112,11 +112,11 @@
           }); 
 
 
-          $("#lbljudul").html("Edit Data Supplier");
+          $("#lbljudul").html("Edit Data Gudang");
           $("#lblactive").html("Edit");
 
     }else{
-          $("#lbljudul").html("Tambah Data Supplier");
+          $("#lbljudul").html("Tambah Data Gudang");
           $("#lblactive").html("Tambah");
     }     
 

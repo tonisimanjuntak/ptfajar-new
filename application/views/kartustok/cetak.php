@@ -130,17 +130,17 @@ $table .= '
                     <th style="text-align:center;" width="15%">TANGGAL</th>
                     <th style="text-align:center;" width="10%">NO BUKTI</th>
                     <th style="text-align:center;" width="10%">TGL BUKTI</th>
-                    <th style="text-align:center;" width="10%">STOK AWAL</th>
-                    <th style="text-align:center;" width="10%">PENERIMAAN</th>
-                    <th style="text-align:center;" width="10%">PENGELUARAN</th>
+                    <th style="text-align:center;" width="8%">STOK AWAL</th>
+                    <th style="text-align:center;" width="8%">TERIMA</th>
+                    <th style="text-align:center;" width="8%">KELUAR</th>
                     <th style="text-align:center;" width="10%">STOK AKHIR</th>
-                    <th style="text-align:center;" width="20%">KETERANGAN</th>
+                    <th style="text-align:center;" width="26%">KETERANGAN</th>
                 </tr>
             </thead>
             <tbody>';
 
 
-$nomor = $this->db->query("select count(*) as nomor from kartustok where CONVERT(tglinsert, DATE) < '".$tglawal."'")->row()->nomor;
+$nomor = $this->db->query("select count(*) as nomor from kartustok where kodeakun='$kodeakun' and CONVERT(tglinsert, DATE) < '".$tglawal."'")->row()->nomor;
 $nomor++;
 if ($rskartustok->num_rows() > 0) {
     
@@ -154,11 +154,11 @@ if ($rskartustok->num_rows() > 0) {
                     <td style="text-align:center;" width="15%">'.date('d-m-Y H:i:s', strtotime($row->tglinsert)).'</td>
                     <td style="text-align:center;" width="10%">'.$row->idtransaksi.'</td>
                     <td style="text-align:center;" width="10%">'.$row->tgltransaksi.'</td>
-                    <td style="text-align:center;" width="10%">'.number_format($row->stokawal).'</td>
-                    <td style="text-align:center;" width="10%">'.number_format($row->jumlahmasuk).'</td>
-                    <td style="text-align:center;" width="10%">'.number_format($row->jumlahkeluar).'</td>
+                    <td style="text-align:center;" width="8%">'.number_format($row->stokawal).'</td>
+                    <td style="text-align:center;" width="8%">'.number_format($row->jumlahmasuk).'</td>
+                    <td style="text-align:center;" width="8%">'.number_format($row->jumlahkeluar).'</td>
                     <td style="text-align:center;" width="10%">'.number_format($row->stokakhir).'</td>
-                    <td style="text-align:left;" width="20%">'.$row->deskripsi.'</td>
+                    <td style="text-align:left;" width="26%">'.$row->deskripsi.'</td>
                 </tr>
         ';
 

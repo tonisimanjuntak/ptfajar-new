@@ -104,12 +104,14 @@ class Stokopname_model extends CI_Model {
     		$jumlahmasuk = 0;
     		$jumlahkeluar = 0;
         	if ($row['selisih']>0) {
-				$jumlahmasuk = $row['selisih'];
+				$jumlahmasuk = abs($row['selisih']);
         	}
 
         	if ($row['selisih']<0) {
-				$jumlahkeluar = $row['selisih'];
+				$jumlahkeluar = abs($row['selisih']);
         	}
+            $deskripsi = 'Stokopname Oleh '.$this->session->userdata('namapengguna');
+
 	        $idkartustok = $this->db->query("SELECT create_idkartustok('".date('Y-m-d')."') as idkartustok")->row()->idkartustok;
 	        $dataKartuStok = array(
 	        							'idkartustok' => $idkartustok, 
@@ -122,7 +124,8 @@ class Stokopname_model extends CI_Model {
 	        							'stokawal' => $row['jumlahpersediaansistem'], 
 	        							'jumlahmasuk' => $jumlahmasuk, 
 	        							'jumlahkeluar' => $jumlahkeluar, 
-	        							'stokakhir' => $row['jumlahpersediaaninput']
+	        							'stokakhir' => $row['jumlahpersediaaninput'],
+                                        'deskripsi' => $deskripsi
 	        						);
 	        $this->db->insert('kartustok', $dataKartuStok);
         }

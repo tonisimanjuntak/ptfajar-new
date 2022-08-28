@@ -153,7 +153,7 @@ class Penerimaan_model extends CI_Model {
                 $jumlahmasuk = 0;
                 $jumlahkeluar = $row->jumlahbarang;
                 $stokakhir = $stokawal + $jumlahmasuk - $jumlahkeluar;
-                $deskripsi = 'Dihapus Oleh '.$this->session->userdata('namapengguna');
+                $deskripsi = 'Penerimaan Dihapus Oleh '.$this->session->userdata('namapengguna');
 
                 $idkartustok = $this->db->query("SELECT create_idkartustok('".date('Y-m-d')."') as idkartustok")->row()->idkartustok;
                 $dataKartuStok = array(
@@ -196,7 +196,7 @@ class Penerimaan_model extends CI_Model {
             $jumlahmasuk = $row['jumlahbarang'];
             $jumlahkeluar = 0;
             $stokakhir = $stokawal + $jumlahmasuk - $jumlahkeluar;
-            $deskripsi = 'Ditambahkan Oleh '.$this->session->userdata('namapengguna');
+            $deskripsi = 'Penerimaan Ditambahkan Oleh '.$this->session->userdata('namapengguna');
 
             $idkartustok = $this->db->query("SELECT create_idkartustok('".date('Y-m-d')."') as idkartustok")->row()->idkartustok;
             $dataKartuStok = array(

@@ -6,12 +6,12 @@
 
   <div class="row" id="toni-breadcrumb">
     <div class="col-6">
-        <h4 class="text-dark mt-2">Supplier</h4>
+        <h4 class="text-dark mt-2">Gudang</h4>
     </div>  
     <div class="col-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="<?php echo(site_url()) ?>">Home</a></li>
-        <li class="breadcrumb-item active">Supplier</li>
+        <li class="breadcrumb-item active">Gudang</li>
       </ol>
       
     </div>
@@ -21,7 +21,7 @@
     <div class="col-md-12">
       <div class="card" id="cardcontent">
         <div class="card-header">
-          <h5 class="card-title">List Data Supplier</h5>
+          <h5 class="card-title">List Data Gudang</h5>
           <a href="<?php echo(site_url('supplier/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
         </div>
         <div class="card-body">
@@ -33,8 +33,8 @@
                   <thead>
                     <tr class="bg-primary" style="">
                       <th style="width: 5%; text-align: center;">No</th>
-                      <th style="text-align: center;">Nama Supplier</th>
-                      <th style="text-align: center;">Alamat Supplier</th>
+                      <th style="text-align: center;">Nama Gudang</th>
+                      <th style="text-align: center;">Alamat Gudang</th>
                       <th style="text-align: center;">No. Telp/ Email</th>
                       <th style="text-align: center;">Status</th>
                       <th style="text-align: center; width: 15%;">Aksi</th>
