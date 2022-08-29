@@ -23,6 +23,8 @@
         <div class="card-header">
           <h5 class="card-title">List Data Akun</h5>
           <a href="<?php echo(site_url('Akun/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
+          <a href="<?php echo(site_url('Akun/importexcel')) ?>" class="btn btn-sm btn-info float-right mr-2"><i class="fa fa-cloud-upload-alt" target="_blank"></i> Upload Excel</a>
+          <a href="<?php echo(site_url('Akun/importexcel')) ?>" class="btn btn-sm btn-success float-right mr-2"><i class="fa fa-file-excel" target="_blank"></i> Download Format</a>
         </div>
         <div class="card-body">
           <div class="row">

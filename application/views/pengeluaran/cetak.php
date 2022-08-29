@@ -140,7 +140,7 @@ $table  .= '<table border="0" width="100%" cellpadding="5">
                         <th style="width: 40%">'.$namagudang.'</th>
                         <th style="width: 20%;">Tanggal Pengeluaran</th>
                         <th style="width: 5%;">:</th>
-                        <th style="width: 15%;">'.$rowpengeluaran->tglpengeluaran.'</th>
+                        <th style="width: 15%;">'.tglindonesia($rowpengeluaran->tglpengeluaran).'</th>
                     </tr>
                     <tr>
                         <th style="width: 15%;">Tanggal Permintaan</th>
