@@ -11,7 +11,7 @@ class Home_model extends CI_Model {
         return $rsakun;
 	}
 
-	public function getchartakun($tahun='', $kodeakun)
+	public function getchartakun($tahun='', $kodeakun='')
 	{
 		if (empty($tahun)) {
 			$tahun = date('Y');

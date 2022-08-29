@@ -38,6 +38,43 @@ class Penerimaan extends MY_Controller {
         $this->load->view('penerimaan/form', $data);
     }
 
+    public function cetaknota($idpenerimaan)
+    {       
+        $idpenerimaan = $this->encrypt->decode($idpenerimaan);
+        $rspenerimaan = $this->Penerimaan_model->get_by_id($idpenerimaan);
+        if ($rspenerimaan->num_rows()<1) {
+            $pesan = '<script>swal("Ilegal!", "Data tidak ditemukan.", "error")</script>';
+            $this->session->set_flashdata('pesan', $pesan);
+            redirect('penerimaan');
+            exit();
+        };
+
+        error_reporting(0);
+        $this->load->library('Pdf');
+        $rsdetail = $this->db->query("select * from v_penerimaandetail where idpenerimaan='$idpenerimaan'");
+        $rowpengaturan = $this->db->query("select * from pengaturan")->row();
+        $rsgudang = $this->db->query("select * from gudang where idgudang='".$rspenerimaan->row()->idgudang."'");
+
+        if ($rsgudang->num_rows()>0) {
+            $rowgudang = $rsgudang->row();
+            $data['namagudang'] = $rowgudang->namagudang;
+            $data['alamatgudang'] = $rowgudang->alamatgudang;
+            $data['emailgudang'] = $rowgudang->emailgudang;
+            $data['notelpgudang'] = 'Telp. '.$rowgudang->notelpgudang;
+        }else{
+            $data['namagudang'] = '';
+            $data['alamatgudang'] = '';
+            $data['emailgudang'] = '';
+            $data['notelpgudang'] = '';
+        }
+
+        $data['idpenerimaan'] = $idpenerimaan;      
+        $data['rowpenerimaan'] = $rspenerimaan->row();      
+        $data['rowpengaturan'] = $rowpengaturan;
+        $data['rsdetail'] = $rsdetail;
+        $this->load->view('penerimaan/cetak', $data);
+    }    
+
     public function datatablesource()
     {
         $RsData = $this->Penerimaan_model->get_datatables();
@@ -62,6 +99,7 @@ class Penerimaan extends MY_Controller {
                       </button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="'.site_url('penerimaan/delete/'.$this->encrypt->encode($rowdata->idpenerimaan) ).'" id="hapus">Hapus</a>
+                        <a class="dropdown-item" href="'.site_url('penerimaan/cetaknota/'.$this->encrypt->encode($rowdata->idpenerimaan) ).'" target="_blank">Cetak Nota</a>
                       </div>
                     </div>
                 ';
