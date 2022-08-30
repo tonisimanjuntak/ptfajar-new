@@ -30,6 +30,24 @@ class App extends CI_Model {
         return $this->db->query("select get_hargajual_ma('".$kodeakun."', '".$tahun."') as hargajual")->row()->hargajual;
     }
 
+    public function upload_file_importexcel($filename){
+        $this->load->library('upload'); 
+        $config['upload_path'] = 'uploads/importexcel/';
+        $config['allowed_types'] = 'xlsx';
+        $config['max_size']  = '2048';
+        $config['overwrite'] = true;
+        $config['file_name'] = $filename;
+      
+        $this->upload->initialize($config); 
+        if($this->upload->do_upload('file')){ 
+          $return = array('result' => 'success', 'file' => $this->upload->data(), 'error' => '');
+          return $return;
+        }else{
+          $return = array('result' => 'failed', 'file' => '', 'error' => $this->upload->display_errors());
+          return $return;
+        }
+    }
+
 }
 
 /* End of file App.php */

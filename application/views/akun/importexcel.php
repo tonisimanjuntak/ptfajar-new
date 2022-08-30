@@ -10,6 +10,8 @@
     color: #5D62C1;
   }
 </style>
+<script src="<?php echo(base_url()) ?>assets/adminlte/plugins/jquery/jquery.min.js"></script>
+
 
 <div class="row" id="toni-breadcrumb">
     <div class="col-6">
@@ -35,143 +37,116 @@
                 
                 <form action="<?php echo(site_url('akun/importdata')) ?>" method="post" id="form" enctype="multipart/form-data">                      
                   <div class="row">
-                    <div class="col-12">
-                      <h5>Pilih File Excel Yang Akan di Upload</h5>
+                    <div class="col-md-6">
+                      <div class="row">
+                        
+                        <div class="col-12">
+                          <h5>Pilih File Excel Yang Akan di Upload</h5>
+                        </div>
+                        <div class="col-12 sub-test">
+                          <span class="">Penting! Format excel yang akan diupload harus sesuai dengan kebutuhan sistem!</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-12 sub-test">
-                      <span class="">Penting! Format excel yang akan diupload harus sesuai dengan kebutuhan sistem!</span>
+                    <div class="col-md-6">
+                      <a href="<?php echo(base_url('uploads/templateexcel/akun.xlsx')) ?>" class="btn btn-sm btn-success float-right mr-2" download><i class="fa fa-file-excel" target="_blank"></i> Download Format Excel</a>
                     </div>
+
                     <div class="col-12">
-                      <input type="file" name="file">
-                      <input type="submit" name="preview" value="Preview"><br><br>
+                      <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                    </div>
+                    <div class="col-12 mt-3">
+                      <input type="submit" name="preview" value="Tampilkan Data" class="btn btn-sm btn-info">
                     </div>
                   </div>
                 </form>
 
 
                 <?php
-                          if(isset($_POST['preview'])){ // Jika user menekan tombol Preview pada form 
-                            if(isset($upload_error)){ // Jika proses upload gagal
-                              echo "<div style='color: red;'>".$upload_error."</div>"; // Muncul pesan error upload
-                              die; // stop skrip
-                            }
-                            
-                            // Buat sebuah tag form untuk proses import data ke database
-                            echo "<form method='post' action='".base_url("index.php/Pegawai/simpan_import")."'>";
-                            
-                            // Buat sebuah div untuk alert validasi kosong
-                            echo "<div style='color: red; display: none;' id='kosong'>
-                            Semua data belum diisi, Ada <span id='jumlah_kosong'></span> data yang belum diisi (Yang berwarna Merah wajib diisi).
-                            </div>";
-                            
-                            echo "
-                            <div class='table-responsive'>
-                            <table class='table table-bordered'>
+                  if(isset($_POST['preview'])){ 
+                    if(isset($upload_error)){ 
+                      echo "<div style='color: red;'>".$upload_error."</div>"; 
+                      die; 
+                    }
+                ?>
+                    
+                    <hr class="mt-5">
+                    <form method="post" action="<?php echo site_url('akun/simpan_import') ?>">
+                      
+                      <h3>Preview Data</h3>
+                      <div class="alert alert-danger" role="alert" style="display: none;" id="kosong">
+                        Semua data belum diisi, Ada <span id='jumlah_kosong'></span> data yang belum diisi (Yang berwarna Merah wajib diisi).
+                      </div>
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
                             <tr>
-                              <th colspan='13'>Preview Data</th>
-                            </tr>
-                            <tr>
-                              <th style='width: 5%; text-align: center;'>NIK</th>
-                              <th>Nama</th>
-                              <th>Jabatan</th>
-                              <th>J Kelamin</th>
-                              <th>Tgl Lahir</th>
-                              <th>Agama</th>
-                              <th>Pendidikan</th>
-                              <th>Alamat</th>                             
-                              <th>Status Nikah</th>
-                            </tr>";
+                              <th style='width: 5%; text-align: center;'>Kode Akun</th>
+                              <th>Nama Akun</th>
+                              <th>Parent Akun</th>
+                            </tr>                            
+                          </thead>
+                          <tbody>
                             
-                            $numrow = 1;
-                            $kosong = 0;
-                            
-                            // Lakukan perulangan dari data yang ada di excel
-                            // $sheet adalah variabel yang dikirim dari controller
-                            foreach($sheet as $row){ 
-                              // Ambil data pada excel sesuai Kolom
-                              $nik = $row['A']; 
-                              $nama = $row['B'];
-                              $jabatan = $row['C'];  
-                              $jkelamin = $row['D']; 
-                              $tgllahir = $row['E']; 
-                              $tempatlahir = $row['F']; 
-                              $agama = $row['G']; 
-                              $pendidikan = $row['H']; 
-                              $alamat = $row['I']; 
-                              $telp = $row['J'];
-                              $email = $row['K']; 
-                              $statusnikah = $row['L'];
 
-                              // Cek jika semua data tidak diisi
-                              if(empty($nik))
-                                continue; // Lewat data pada baris ini (masuk ke looping selanjutnya / baris selanjutnya)
+
+                          <?php
+                              $numrow = 1;
+                              $kosong = 0;
                               
-                              // Cek $numrow apakah lebih dari 1
-                              // Artinya karena baris pertama adalah nama-nama kolom
-                              // Jadi dilewat saja, tidak usah diimport
-                              if($numrow > 1){
-                                // Validasi apakah semua data telah diisi
-                                // Jika kosong, beri warna merah
-                                $nik_td = ( ! empty($nik))? "" : " style='background: #E07171;'"; 
-                                $nama_td = ( ! empty($nama))? "" : " style='background: #E07171;'"; 
-                                $tgllahir_td = ( ! empty($tgllahir))? "" : " style='background: #E07171;'";
-                                $jkelamin_td = ( ! empty($jkelamin))? "" : " style='background: #E07171;'";
-                                $agama_td = ( ! empty($agama))? "" : " style='background: #E07171;'";
-                                $jabatan_td = ( ! empty($jabatan))? "" : " style='background: #E07171;'";
-                                $pendidikan_td = ( ! empty($pendidikan))? "" : " style='background: #E07171;'";
-                                $statusnikah_td = ( ! empty($statusnikah))? "" : " style='background: #E07171;'";
+                              foreach($sheet as $row){ 
+                                $kodeakun = $row[0]; 
+                                $namaakun = $row[1];
+                                $parentakun = $row[2];  
 
+                                if(empty($kodeakun))
+                                  continue; 
+                                
+                                if($numrow > 1){ 
+                                  $kodeakun_td = ( ! empty($kodeakun))? '' : 'class="bg-danger"'; 
+                                  $namaakun_td = ( ! empty($namaakun))? '' : 'class="bg-danger"'; 
+                                  $parentakun_td = '';
+                                  if (strlen($kodeakun)>1) {
+                                    $parentakun_td = ( ! empty($parentakun))? '' : 'class="bg-danger"';
+                                  }
 
-                                // Jika salah satu data ada yang kosong
-                                if(empty($nik) or empty($nama) or empty($jkelamin) or empty($tgllahir) or empty($agama) or empty($jabatan) or empty($pendidikan) or empty($statusnikah)){
-                                  $kosong++;  // Tambah 1 variabel $kosong
+                                  if(empty($kodeakun) or empty($namaakun) or (empty($parentakun) and strlen($kodeakun)>1) ){
+                                    $kosong++;  // Tambah 1 variabel $kosong
+                                  }
+                                  
+                                  echo "<tr>
+                                            <td ".$kodeakun_td.">".$kodeakun."</td>
+                                            <td ".$namaakun_td.">".$namaakun."</td>
+                                            <td ".$parentakun_td.">".$parentakun."</td>
+                                        </tr>";
                                 }
                                 
-                                echo "<tr>";
-                                echo "<td".$nik_td.">".$nik."</td>";
-                                echo "<td".$nama_td.">".$nama."</td>";
-                                echo "<td".$jabatan_td.">".$jabatan."</td>";
-                                echo "<td".$jkelamin_td.">".$jkelamin."</td>";        
-                                echo "<td".$tgllahir_td.">".$tgllahir."</td>";
-                                echo "<td".$agama_td.">".$agama."</td>";
-                                echo "<td".$pendidikan_td.">".$pendidikan."</td>";
-                                echo "<td>".$alamat."</td>";
-                                echo "<td".$statusnikah_td.">".$statusnikah."</td>";
-                                echo "</tr>";
+                                $numrow++; 
                               }
-                              
-                              $numrow++; // Tambah 1 setiap kali looping
-                            }
-                            
-                            echo "</table>
-                            </div>";
-                            
-                            // Cek apakah variabel kosong lebih dari 0
-                            // Jika lebih dari 0, berarti ada data yang masih kosong
-                            if($kosong > 0){
-                            ?>  
-                              <script>
-                              $(document).ready(function(){
-                                // Ubah isi dari tag span dengan id jumlah_kosong dengan isi dari variabel kosong
-                                $("#jumlah_kosong").html('<?php echo $kosong; ?>');
-                                
-                                $("#kosong").show(); // Munculkan alert validasi kosong
-                              });
-                              </script>
-                            <?php
-                            }else{ // Jika semua data sudah diisi
-                              echo "<hr>";
-                              
-                              // Buat sebuah tombol untuk mengimport data ke database
-                              echo "<button type='submit' name='import' class='btn btn-success fa fa-cloud-upload'> Import Data</button>";
-                              echo "<a href='".base_url("index.php/Pegawai")."' class='btn btn-default'>Cancel</a>";
-                            }
-                            
-                            echo "</form>";
-                          }
-                          ?>
+                            ?>
+                          </tbody>                        
+                      </table>
+                    </div>
+                    
+                    <?php  if($kosong > 0) { ?>  
 
+                        <script>
+                          $(document).ready(function(){
+                            $("#jumlah_kosong").html('<?php echo $kosong; ?>');                          
+                            $("#kosong").show();
+                          });
+                        </script>
 
+                    <?php }else{ ?>
+
+                        <hr>
+                        <button type="submit" name="import" class="btn btn-success float-right"><i class="fa fa-file-import"></i> Import Data</button>
+                        <a href="<?php echo(site_url('akun')) ?>" class="btn btn-default float-right mr-1 ml-1"><i class="fa fa-chevron-circle-left"></i> Kembali</a>
+                    <?php } ?>
+                    
+                    </form>
+
+                <?php  } ?>
                                         
               </div> <!-- ./card-body -->
 

@@ -1,10 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Akun extends MY_Controller {
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-    private $filename = "import_data"; // Kita tentukan nama filenya
-    
+class Akun extends MY_Controller {
+        
     public function __construct()
     {
         parent::__construct();
@@ -184,29 +185,99 @@ class Akun extends MY_Controller {
 
     public function importdata()
     {
-        $data = array(); // Buat variabel $data sebagai array
+        $filename = 'akun';
+        $data = array(); 
         
-        if(isset($_POST['preview'])){ // Jika user menekan tombol Preview pada form
-          // lakukan upload file dengan memanggil function upload yang ada di Akun_model.php
-          $upload = $this->Akun_model->upload_file($this->filename);
-          
-          if($upload['result'] == "success"){ // Jika proses upload sukses
-            // Load plugin PHPExcel namaayah
-            include APPPATH.'third_party/PHPExcel/PHPExcel.php';
-            
-            $excelreader = new PHPExcel_Reader_Excel2007();
-            $loadexcel = $excelreader->load('../uploads/excel/'.$this->filename.'.xlsx'); // Load file yang tadi diupload ke folder excel
-            $sheet = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
-            
-            // Masukan variabel $sheet ke dalam array data yang nantinya akan di kirim ke file form.php
-            // Variabel $sheet tersebut berisi data-data yang sudah diinput di dalam excel yang sudha di upload sebelumnya
-            $data['sheet'] = $sheet; 
-          }else{ // Jika proses upload gagal
-            $data['upload_error'] = $upload['error']; // Ambil pesan error uploadnya untuk dikirim ke file form dan ditampilkan
+        if(isset($_POST['preview'])){ 
+          $upload = $this->App->upload_file_importexcel($filename);          
+          if($upload['result'] == "success"){ 
+            //PhpSpreadSheet
+            $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($inputFileName);
+            $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+            $arrSheet = $sheet1->toArray();            
+            $data['sheet'] = $arrSheet; 
+          }else{ 
+            $data['upload_error'] = $upload['error']; 
           }
         }
         
-        $this->load->view('pegawai/import', $data);
+        $data['menu'] = 'akun';  
+        $this->load->view('akun/importexcel', $data);
+    }
+
+    public function simpan_import(){
+        $filename = 'akun';
+        $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($inputFileName);
+        $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+        $arrSheet = $sheet1->toArray();            
+
+        $data = array();        
+        $numrow = 1;
+        $kosong = 0;
+          
+        foreach($arrSheet as $row){ 
+            $kodeakun = $row[0]; 
+            $namaakun = $row[1];
+            $parentakun = $row[2];  
+            
+            if(empty($kodeakun))
+              continue;
+
+            if($numrow == 1){
+                $numrow++;
+                continue;
+            } 
+
+            $rsakun = $this->Akun_model->get_by_id($kodeakun);
+            if ($rsakun->num_rows()>0) {
+                    $pesan = '<script>swal("Gagal!", "Kode akun '.$kodeakun.' sudah ada!", "error")</script>';
+                    $this->session->set_flashdata('pesan', $pesan);
+                    redirect('akun');
+                    break;
+            }
+
+
+            if (empty($parentakun)) {
+                $parentakun = NULL;
+                $level = 1;
+            }else{
+                $rsparent = $this->Akun_model->get_by_id($parentakun);
+                if ($rsparent->num_rows()<1) {
+                    $pesan = '<script>swal("Gagal!", "Parent akun '.$kodeakun.' tidak ditemukan!", "error")</script>';
+                    $this->session->set_flashdata('pesan', $pesan);
+                    redirect('akun');
+                    break;
+                }
+                $levelparent = $rsparent->row()->level;
+                $level = $levelparent + 1;            
+            }
+
+            array_push($data, array(
+                                    'kodeakun' => $kodeakun, 
+                                    'namaakun' => $namaakun, 
+                                    'parentakun' => $parentakun, 
+                                    'jumlahpersediaan' => 0, 
+                                    'level' => $level
+                                ));
+            $numrow++; 
+        }
+
+
+        $simpan = $this->Akun_model->simpan_import($data);
+        if ($simpan) {
+            $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
+        }else{
+            $eror = $this->db->error();         
+            $pesan = '<script>swal("Gagal!", "Data gagal disimpan! Pesan Eror: '.$eror['code'].' '.$eror['message'].'", "error")</script>';
+        }
+        $this->session->set_flashdata('pesan', $pesan);
+        redirect('akun');
     }
 }
 
