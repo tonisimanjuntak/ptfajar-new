@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Akun extends MY_Controller {
 
+    private $filename = "import_data"; // Kita tentukan nama filenya
+    
     public function __construct()
     {
         parent::__construct();
@@ -182,39 +184,29 @@ class Akun extends MY_Controller {
 
     public function importdata()
     {
-        $target = basename($_FILES['filepegawai']['name']) ;
-        move_uploaded_file($_FILES['filepegawai']['tmp_name'], $target);
-         
-        // beri permisi agar file xls dapat di baca
-        chmod($_FILES['filepegawai']['name'],0777);
-         
-        // mengambil isi file xls
-        $data = new Spreadsheet_Excel_Reader($_FILES['filepegawai']['name'],false);
-        var_dump($data);
-        // menghitung jumlah baris data yang ada
-        // $jumlah_baris = $data->rowcount($sheet_index=0);
-         
-        // // jumlah default data yang berhasil di import
-        // $berhasil = 0;
-        // for ($i=2; $i<=$jumlah_baris; $i++){
-         
-        //     // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
-        //     $nama     = $data->val($i, 1);
-        //     $alamat   = $data->val($i, 2);
-        //     $telepon  = $data->val($i, 3);
-         
-        //     if($nama != "" && $alamat != "" && $telepon != ""){
-        //         // input data ke database (table data_pegawai)
-        //         mysqli_query($koneksi,"INSERT into data_pegawai values('','$nama','$alamat','$telepon')");
-        //         $berhasil++;
-        //     }
-        // }
-         
-        // hapus kembali file .xls yang di upload tadi
-        unlink($_FILES['filepegawai']['name']);
-         
-        // alihkan halaman ke index.php
-        // header("location:index.php?berhasil=$berhasil");
+        $data = array(); // Buat variabel $data sebagai array
+        
+        if(isset($_POST['preview'])){ // Jika user menekan tombol Preview pada form
+          // lakukan upload file dengan memanggil function upload yang ada di Akun_model.php
+          $upload = $this->Akun_model->upload_file($this->filename);
+          
+          if($upload['result'] == "success"){ // Jika proses upload sukses
+            // Load plugin PHPExcel namaayah
+            include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+            
+            $excelreader = new PHPExcel_Reader_Excel2007();
+            $loadexcel = $excelreader->load('../uploads/excel/'.$this->filename.'.xlsx'); // Load file yang tadi diupload ke folder excel
+            $sheet = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+            
+            // Masukan variabel $sheet ke dalam array data yang nantinya akan di kirim ke file form.php
+            // Variabel $sheet tersebut berisi data-data yang sudah diinput di dalam excel yang sudha di upload sebelumnya
+            $data['sheet'] = $sheet; 
+          }else{ // Jika proses upload gagal
+            $data['upload_error'] = $upload['error']; // Ambil pesan error uploadnya untuk dikirim ke file form dan ditampilkan
+          }
+        }
+        
+        $this->load->view('pegawai/import', $data);
     }
 }
 
