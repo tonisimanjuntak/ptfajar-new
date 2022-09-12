@@ -96,7 +96,7 @@
 
                                         $level = $this->db->query("select max(level) as level from akun")->row()->level;
 
-                                        $rsakun = $this->db->query("select * from akun where kodeakun = left('".$kodeakunbarang."', ".$nlen.")  and level=".$level." order by kodeakun");
+                                        $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")='".$kodeakunbarang."'  and level=".$level." order by kodeakun");
                                         foreach ($rsakun->result() as $row) {
                                           echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
                                         }
