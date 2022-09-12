@@ -47,7 +47,9 @@
                       <select name="kodeakun" id="kodeakun" class="form-control select2">
                         <option value="-">Pilih nama akun barang...</option>
                         <?php  
-                          $rsakun = $this->db->query("select * from v_akun_level_max where kodeakun like '%".$rowpengaturan->kodeakunbarang."%' order by kodeakun");
+                          $nlen = strlen($rowpengaturan->kodeakunbarang);
+                        
+                          $rsakun = $this->db->query("select * from v_akun_level_max where left(kodeakun, ".$nlen.")  = '".$rowpengaturan->kodeakunbarang."' order by kodeakun");
                           if ($rsakun->num_rows()>0) {
                             foreach ($rsakun->result() as $row) {
                               echo '
