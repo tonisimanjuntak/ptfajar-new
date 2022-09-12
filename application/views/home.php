@@ -68,8 +68,9 @@
                               <option value="">Semua barang...</option>
                               <?php
                                 $kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
+                                $nlen = strlen($kodeakunbarang);
                                 $level = $this->db->query("select max(level) as level from akun")->row()->level;
-                                $rsakun = $this->db->query("select * from akun where kodeakun like '%".$kodeakunbarang."%' and level=".$level." order by kodeakun");
+                                $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
                                 foreach ($rsakun->result() as $row) {
                                   echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
                                 }
