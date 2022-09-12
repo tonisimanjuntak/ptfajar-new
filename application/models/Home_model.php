@@ -6,8 +6,10 @@ class Home_model extends CI_Model {
 	public function get_akun_barang()
 	{
 		$kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
+		$nlen = strlen($kodeakunbarang);
+
         $level = $this->db->query("select max(level) as level from akun")->row()->level;
-        $rsakun = $this->db->query("select * from akun where kodeakun like '%".$kodeakunbarang."%' and level=".$level." order by kodeakun limit 5");
+        $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun limit 5");
         return $rsakun;
 	}
 
