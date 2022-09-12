@@ -190,8 +190,6 @@ class Penerimaan_model extends CI_Model {
                                             'totalharga' => $row['totalharga']
                                         );          
             $this->db->insert('penerimaandetail', $dataPenerimaanDetail);
-
-            //Kartu Stok
             $stokawal = $this->App->get_stok_akhir($row['kodeakun']);
             $jumlahmasuk = $row['jumlahbarang'];
             $jumlahkeluar = 0;
@@ -217,6 +215,90 @@ class Penerimaan_model extends CI_Model {
         }
     }
 
+    public function simpan_import_temp($sheet)
+    {
+      $numrow = 1;
+      $kosong = 0;
+      
+      $this->db->query("delete from penerimaandetail_temp");
+      $this->db->query("delete from penerimaan_temp");
+
+      $jenispenerimaanAllowed = array('Pembelian', 'Barang Masuk');
+      $tglpenerimaan_old = '';
+      $jenispenerimaan_old = '';
+      $nourut_old='';
+      $idpenerimaan_old = '';
+      $idpenerimaan = '';
+      $arraydetail = array();
+
+      foreach($sheet as $row){ 
+        $nourut = $row[0]; 
+        $tglpenerimaan = $row[1];
+        $deskripsi = $row[2];  
+        $idgudang = $row[3];  
+        $jenispenerimaan = $row[4];  
+        $kodeakun = $row[5];  
+        $jumlahbarang = $row[6];  
+        $hargabeli = $row[7];  
+
+        if($numrow > 1){ 
+
+            if(empty($tglpenerimaan) && empty($tglpenerimaan_old))
+              continue;
+
+            if (empty($nourut) && empty($tglpenerimaan) && empty($deskripsi) && empty($idgudang) && empty($jenispenerimaan) && empty($kodeakun) && empty($jumlahbarang) && empty($hargabeli)) 
+                continue;
+
+            if (empty($nourut_old) && empty($nourut)) 
+                continue;
+
+
+            if ($nourut!=$nourut_old && $nourut != "") {
+
+                if (count($arraydetail)>0) {
+                    $this->db->insert_batch('penerimaandetail_temp', $arraydetail);
+                }
+
+                $arrayhead = array(
+                        'tglpenerimaan' => date('Y-m-d', $tglpenerimaan),
+                        'deskripsi' => $deskripsi,
+                        'idgudang' => $idgudang,
+                        'jenispenerimaan' => $jenispenerimaan,
+                        'jumlahpenerimaan' => 0
+                );
+                var_dump($arrayhead);
+                exit();
+                $this->db->insert('penerimaan_temp', $arrayhead);
+                $idpenerimaan = $this->db->insert_id();
+                $arraydetail = array(); 
+            }
+
+            array_push($arraydetail, array(
+                                    'idpenerimaan' => $idpenerimaan, 
+                                    'kodeakun' => $kodeakun, 
+                                    'jumlahbarang' => $jumlahbarang, 
+                                    'hargabeli' => $hargabeli, 
+                                    'hargajual' => 0, 
+                                    'totalharga' => $totalharga, 
+                                ));
+
+            $tglpenerimaan_old = $tglpenerimaan;
+            $jenispenerimaan_old = $jenispenerimaan;
+            $nourut_old = $nourut;
+        }
+        
+        $numrow++; 
+      }
+
+      if (count($arraydetail)>0) {
+            $this->db->insert_batch('penerimaandetail_temp', $arraydetail);
+        }
+    }
+
+    public function simpan_import($data)
+    {
+        return $this->db->insert_batch('akun', $data);
+    }
 
 }
 

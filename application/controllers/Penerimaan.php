@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Penerimaan extends MY_Controller {
 
 	public function __construct()
@@ -308,6 +311,110 @@ class Penerimaan extends MY_Controller {
                     'idpengguna'     =>  $RsData->idpengguna,
                     );
         echo(json_encode($data));
+    }
+
+    public function importexcel()
+    {
+        $data['menu'] = 'penerimaan';  
+        $this->load->view('penerimaan/importexcel', $data);
+    }
+
+    public function importdata()
+    {
+        $filename = 'penerimaan';
+        $data = array(); 
+        
+        if(isset($_POST['preview'])){ 
+          $upload = $this->App->upload_file_importexcel($filename);          
+          if($upload['result'] == "success"){ 
+            //PhpSpreadSheet
+            $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($inputFileName);
+            $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+            $arrSheet = $sheet1->toArray();            
+            // $data['sheet'] = $arrSheet; 
+            $this->Penerimaan_model->simpan_import_temp($arrSheet);
+          }else{ 
+            $data['upload_error'] = $upload['error']; 
+          }
+        }
+        
+        $data['menu'] = 'penerimaan';  
+        $this->load->view('penerimaan/importexcel', $data);
+    }
+
+    public function simpan_import(){
+        $filename = 'penerimaan';
+        $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($inputFileName);
+        $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+        $arrSheet = $sheet1->toArray();            
+
+        $data = array();        
+        $numrow = 1;
+        $kosong = 0;
+          
+        foreach($arrSheet as $row){ 
+            $kodeakun = $row[0]; 
+            $namaakun = $row[1];
+            $parentakun = $row[2];  
+            
+            if(empty($kodeakun))
+              continue;
+
+            if($numrow == 1){
+                $numrow++;
+                continue;
+            } 
+
+            $rsakun = $this->Akun_model->get_by_id($kodeakun);
+            if ($rsakun->num_rows()>0) {
+                    $pesan = '<script>swal("Gagal!", "Kode akun '.$kodeakun.' sudah ada!", "error")</script>';
+                    $this->session->set_flashdata('pesan', $pesan);
+                    redirect('penerimaan');
+                    break;
+            }
+
+
+            if (empty($parentakun)) {
+                $parentakun = NULL;
+                $level = 1;
+            }else{
+                $rsparent = $this->Akun_model->get_by_id($parentakun);
+                if ($rsparent->num_rows()<1) {
+                    $pesan = '<script>swal("Gagal!", "Parent akun '.$kodeakun.' tidak ditemukan!", "error")</script>';
+                    $this->session->set_flashdata('pesan', $pesan);
+                    redirect('penerimaan');
+                    break;
+                }
+                $levelparent = $rsparent->row()->level;
+                $level = $levelparent + 1;            
+            }
+
+            array_push($data, array(
+                                    'kodeakun' => $kodeakun, 
+                                    'namaakun' => $namaakun, 
+                                    'parentakun' => $parentakun, 
+                                    'jumlahpersediaan' => 0, 
+                                    'level' => $level
+                                ));
+            $numrow++; 
+        }
+
+
+        $simpan = $this->Akun_model->simpan_import($data);
+        if ($simpan) {
+            $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
+        }else{
+            $eror = $this->db->error();         
+            $pesan = '<script>swal("Gagal!", "Data gagal disimpan! Pesan Eror: '.$eror['code'].' '.$eror['message'].'", "error")</script>';
+        }
+        $this->session->set_flashdata('pesan', $pesan);
+        redirect('penerimaan');
     }
 
 }
