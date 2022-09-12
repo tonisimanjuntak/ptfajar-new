@@ -268,7 +268,8 @@ class Akun extends MY_Controller {
             $numrow++; 
         }
 
-
+        var_dump($data);
+        exit();
         $simpan = $this->Akun_model->simpan_import($data);
         if ($simpan) {
             $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
