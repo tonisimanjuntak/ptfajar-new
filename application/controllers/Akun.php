@@ -220,8 +220,6 @@ class Akun extends MY_Controller {
         $data = array();        
         $numrow = 1;
         $kosong = 0;
-        var_dump($arrSheet);
-        exit();
         foreach($arrSheet as $row){ 
             $kodeakun = $row[0]; 
             $namaakun = $row[1];
@@ -259,19 +257,18 @@ class Akun extends MY_Controller {
                 $level = $levelparent + 1;            
             }
 
-            array_push($data, array(
+            $data = array(
                                     'kodeakun' => $kodeakun, 
                                     'namaakun' => $namaakun, 
                                     'parentakun' => $parentakun, 
                                     'jumlahpersediaan' => 0, 
                                     'level' => $level
-                                ));
+                                );
+            $simpan = $this->Akun_model->simpan_import($data);
             $numrow++; 
         }
 
-        var_dump($data);
-        exit();
-        $simpan = $this->Akun_model->simpan_import($data);
+        // $simpan = $this->Akun_model->simpan_import($data);
         if ($simpan) {
             $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
         }else{
