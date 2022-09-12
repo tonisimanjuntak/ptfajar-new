@@ -23,11 +23,13 @@ class Home extends MY_Controller {
     	$rowpengaturan = $this->db->query("select * from pengaturan")->row();
 
     	$kodeakunbarang = $rowpengaturan->kodeakunbarang;
+    	$nlen = strlen($kodeakunbarang);
+
     	$levelmaxakunbarang = $rowpengaturan->levelmaxakunbarang;
 
         $sebulan = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m-d'))) );
 
-        $jumlahstokhabis = $this->db->query("SELECT COUNT(*) AS jumlahstokhabis FROM akun where kodeakun like '%$kodeakunbarang%' and `level` = $levelmaxakunbarang and jumlahpersediaan=0")->row()->jumlahstokhabis;
+        $jumlahstokhabis = $this->db->query("SELECT COUNT(*) AS jumlahstokhabis FROM akun where left(kodeakun, ".$nlen.")  = '$kodeakunbarang' and `level` = $levelmaxakunbarang and jumlahpersediaan=0")->row()->jumlahstokhabis;
 
         $jumlahbarangbelumterkirim = $this->db->query("SELECT COUNT(*) AS jumlahbarangbelumterkirim FROM v_pengeluaranstatusterkirim where statusterkirim='Belum Terkirim'")->row()->jumlahbarangbelumterkirim;
 
