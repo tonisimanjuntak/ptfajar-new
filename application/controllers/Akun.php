@@ -220,7 +220,8 @@ class Akun extends MY_Controller {
         $data = array();        
         $numrow = 1;
         $kosong = 0;
-          
+        var_dump($arrSheet);
+        exit();
         foreach($arrSheet as $row){ 
             $kodeakun = $row[0]; 
             $namaakun = $row[1];
