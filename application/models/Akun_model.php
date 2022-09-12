@@ -94,7 +94,8 @@ class Akun_model extends CI_Model {
 
     public function simpan_import($data)
     {
-        return $this->db->insert_batch('akun', $data);
+        // return $this->db->insert_batch('akun', $data);
+        return $this->db->insert('akun', $data);
     }    
 
 }
