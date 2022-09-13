@@ -24,6 +24,7 @@
         <div class="card-header">
           <h5 class="card-title">List Data Pengeluaran</h5>
           <a href="<?php echo(site_url('pengeluaran/tambah')) ?>" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus-circle"></i> Tambah Data</a>
+          <a href="<?php echo(site_url('pengeluaran/importexcel')) ?>" class="btn btn-sm btn-success float-right mr-2"><i class="fa fa-cloud-upload-alt" target="_blank"></i> Upload Excel</a>
         </div>
         <div class="card-body">
           <div class="row">

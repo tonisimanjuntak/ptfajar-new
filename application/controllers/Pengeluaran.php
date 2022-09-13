@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Pengeluaran extends MY_Controller {
 
 	public function __construct()
@@ -8,6 +11,7 @@ class Pengeluaran extends MY_Controller {
         parent::__construct();
         $this->authlogin();
         $this->load->model('Pengeluaran_model');
+        $this->load->model('App');
     }
 
     public function index()
@@ -333,7 +337,6 @@ class Pengeluaran extends MY_Controller {
         echo(json_encode($data));
     }
 
-
     public function get_hargajual_ma()
     {
         $kodeakun = $this->input->get('kodeakun');
@@ -348,6 +351,116 @@ class Pengeluaran extends MY_Controller {
         $jumlahpersediaan = $this->db->query("select jumlahpersediaan from akun where kodeakun='$kodeakun'")->row()->jumlahpersediaan;
         echo json_encode($jumlahpersediaan);
     }
+
+    public function importexcel()
+    {
+        $data['menu'] = 'pengeluaran';  
+        $this->load->view('pengeluaran/importexcel', $data);
+    }
+
+    public function importdata()
+    {
+        $filename = 'pengeluaran';
+        $data = array(); 
+        
+        if(isset($_POST['preview'])){ 
+          $upload = $this->App->upload_file_importexcel($filename);          
+          if($upload['result'] == "success"){ 
+            //PhpSpreadSheet
+            $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($inputFileName);
+            $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+            $arrSheet = $sheet1->toArray();            
+            // $data['sheet'] = $arrSheet; 
+            $this->Pengeluaran_model->simpan_import_temp($arrSheet);
+          }else{ 
+            $data['upload_error'] = $upload['error']; 
+          }
+        }
+        
+        $data['menu'] = 'pengeluaran';  
+        $this->load->view('pengeluaran/importexcel', $data);
+    }
+
+    public function simpan_import(){
+
+        $idpengguna = $this->session->userdata('idpengguna');
+        $created_at = date('Y-m-d H:i:s');
+        $updated_at = date('Y-m-d H:i:s');
+
+
+        $rsTemp = $this->db->query("select * from pengeluaran_temp");
+        $no = 1;
+        if ($rsTemp->num_rows()>0) 
+        {
+            foreach ($rsTemp->result() as $rowheader) 
+            {
+          
+                $idpengeluaran = $rowheader->idpengeluaran;
+                $tglpengeluaran = $rowheader->tglpengeluaran;
+                $deskripsi = $rowheader->deskripsi;  
+                $idgudang = $rowheader->idgudang;  
+                $jenispengeluaran = $rowheader->jenispengeluaran;  
+
+                $jumlahpengeluaran = $this->db->query("select sum(totalharga) as jumlahpengeluaran from pengeluaran_tempdetail where idpengeluaran=".$rowheader->idpengeluaran)->row()->jumlahpengeluaran;
+
+                $idpengeluaran = $this->db->query("select create_idpengeluaran('".date('Y-m-d')."') as idpengeluaran ")->row()->idpengeluaran;
+
+                $arrayhead = array(
+                        'idpengeluaran' => $idpengeluaran,
+                        'tglpengeluaran' => $tglpengeluaran,
+                        'deskripsi' => $deskripsi,
+                        'idgudang' => $idgudang,
+                        'jenispengeluaran' => $jenispengeluaran,
+                        'jumlahpengeluaran' => $jumlahpengeluaran,
+                        'created_at' => $created_at,
+                        'updated_at' => $updated_at,
+                        'idpengguna' => $idpengguna
+                        );
+
+
+                $rsTempDetail = $this->db->query("select * from pengeluaran_tempdetail where idpengeluaran=".$rowheader->idpengeluaran);
+                if ($rsTempDetail->num_rows()>0) 
+                {
+                    $i=0;
+                    $arraydetail=array();       
+                    foreach ($rsTempDetail->result() as $rowdetail) 
+                    {
+                        
+                        $detail = array(
+                                        'idpengeluaran' => $idpengeluaran,
+                                        'kodeakun' => $rowdetail->kodeakun,
+                                        'jumlahbarang' => $rowdetail->jumlahbarang,
+                                        'hargabeli' => $rowdetail->hargabeli,
+                                        'hargajual' => $rowdetail->hargajual,
+                                        'totalharga' => $rowdetail->totalharga,
+                                        );
+
+                        array_push($arraydetail, $detail);              
+                        $i++;
+
+                    } //end foreach
+                } //endif
+
+                $simpan  = $this->Pengeluaran_model->simpan($arrayhead, $arraydetail, $idpengeluaran);
+
+            } //end foreaceh
+        } //endif
+
+
+        if ($simpan) {
+            $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
+        }else{
+            $eror = $this->db->error();         
+            $pesan = '<script>swal("Gagal!", "Data gagal disimpan! Pesan Eror: '.$eror['code'].' '.$eror['message'].'", "error")</script>';
+        }
+        $this->session->set_flashdata('pesan', $pesan);
+        redirect('pengeluaran');
+    }
+
+
 }
 
 /* End of file Pengeluaran.php */

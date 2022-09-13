@@ -220,6 +220,91 @@ class Pengeluaran_model extends CI_Model {
     }
 
 
+    public function simpan_import_temp($sheet)
+    {
+      $numrow = 1;
+      $kosong = 0;
+      
+      $this->db->query("delete from pengeluaran_tempdetail");
+      $this->db->query("delete from pengeluaran_temp");
+
+      $jenispengeluaranAllowed = array('Pembelian', 'Barang Masuk');
+      $tglpengeluaran_old = '';
+      $jenispengeluaran_old = '';
+      $nourut_old='';
+      $idpengeluaran_old = '';
+      $idpengeluaran = '';
+      $arraydetail = array();
+
+      foreach($sheet as $row){ 
+        $nourut = $row[0]; 
+        $tglpengeluaran = $row[1];
+        $deskripsi = $row[2];  
+        $idgudang = $row[3];  
+        $jenispengeluaran = $row[4];  
+        $kodeakun = $row[5];  
+        $jumlahbarang = $row[6];  
+        $hargabeli = $row[7];  
+        $totalharga = (int)$jumlahbarang*(int)$hargabeli;
+
+        if($numrow > 1){ 
+
+            if(empty($tglpengeluaran) && empty($tglpengeluaran_old))
+              continue;
+
+            if (empty($nourut) && empty($tglpengeluaran) && empty($deskripsi) && empty($idgudang) && empty($jenispengeluaran) && empty($kodeakun) && empty($jumlahbarang) && empty($hargabeli)) 
+                continue;
+
+            // if (empty($nourut_old) && empty($nourut)) 
+            //     continue;
+
+
+            if ($nourut!=$nourut_old && $nourut != "") {
+
+                if (count($arraydetail)>0) {
+                    $this->db->insert_batch('pengeluaran_tempdetail', $arraydetail);
+                }
+
+                $arrayhead = array(
+                        'tglpengeluaran' => date('Y-m-d', strtotime($tglpengeluaran)),
+                        'deskripsi' => $deskripsi,
+                        'idgudang' => $idgudang,
+                        'jenispengeluaran' => $jenispengeluaran,
+                        'jumlahpengeluaran' => 0
+                );
+                $this->db->insert('pengeluaran_temp', $arrayhead);
+                $idpengeluaran = $this->db->insert_id();
+                $arraydetail = array(); 
+            }
+
+            array_push($arraydetail, array(
+                                    'idpengeluaran' => $idpengeluaran, 
+                                    'kodeakun' => $kodeakun, 
+                                    'jumlahbarang' => $jumlahbarang, 
+                                    'hargabeli' => $hargabeli, 
+                                    'hargajual' => 0, 
+                                    'totalharga' => $totalharga, 
+                                ));
+
+            $tglpengeluaran_old = $tglpengeluaran;
+            $jenispengeluaran_old = $jenispengeluaran;
+            $nourut_old = $nourut;
+        }
+        
+        $numrow++; 
+      }
+
+      if (count($arraydetail)>0) {
+            $this->db->insert_batch('pengeluaran_tempdetail', $arraydetail);
+        }
+    }
+
+    public function simpan_import($data)
+    {
+        return $this->db->insert_batch('akun', $data);
+    }
+
+
 }
 
 /* End of file Pengeluaran_model.php */
