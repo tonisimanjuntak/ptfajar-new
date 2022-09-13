@@ -403,6 +403,7 @@ class Pengeluaran extends MY_Controller {
                 $deskripsi = $rowheader->deskripsi;  
                 $idgudang = $rowheader->idgudang;  
                 $jenispengeluaran = $rowheader->jenispengeluaran;  
+                $statusterkirim = 'Belum Terkirim';
 
                 $jumlahpengeluaran = $this->db->query("select sum(totalharga) as jumlahpengeluaran from pengeluaran_tempdetail where idpengeluaran=".$rowheader->idpengeluaran)->row()->jumlahpengeluaran;
 
@@ -415,6 +416,7 @@ class Pengeluaran extends MY_Controller {
                         'idgudang' => $idgudang,
                         'jenispengeluaran' => $jenispengeluaran,
                         'jumlahpengeluaran' => $jumlahpengeluaran,
+                        'statusterkirim' => $statusterkirim,
                         'created_at' => $created_at,
                         'updated_at' => $updated_at,
                         'idpengguna' => $idpengguna
