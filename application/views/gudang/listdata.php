@@ -33,6 +33,7 @@
                   <thead>
                     <tr class="bg-primary" style="">
                       <th style="width: 5%; text-align: center;">No</th>
+                      <th style="text-align: center;">ID Gudang</th>
                       <th style="text-align: center;">Nama Gudang</th>
                       <th style="text-align: center;">Alamat Gudang</th>
                       <th style="text-align: center;">No. Telp/ Email</th>
@@ -86,7 +87,8 @@
                         { "targets": [ 2 ], "className": "dt-body-center" },
                         { "targets": [ 3 ], "className": "dt-body-center" },
                         { "targets": [ 4 ], "className": "dt-body-center" },
-                        { "targets": [ 5 ], "orderable": false, "className": "dt-body-center" },
+                        { "targets": [ 5 ], "className": "dt-body-center" },
+                        { "targets": [ 6 ], "orderable": false, "className": "dt-body-center" },
         ],
  
     });

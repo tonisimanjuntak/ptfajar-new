@@ -7,8 +7,8 @@ class Gudang_model extends CI_Model {
     var $tabel     = 'gudang';
     var $idgudang = 'idgudang';
 
-    var $column_order = array(null,'namagudang','alamatgudang','notelpgudang','statusaktif' );
-    var $column_search = array('namagudang','alamatgudang','notelpgudang','emailgudang','statusaktif');
+    var $column_order = array(null, 'idgudang','namagudang','alamatgudang','notelpgudang','statusaktif' );
+    var $column_search = array('idgudang', 'namagudang','alamatgudang','notelpgudang','emailgudang','statusaktif');
     var $order = array('idgudang' => 'desc'); // default order 
 
 

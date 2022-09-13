@@ -54,6 +54,7 @@ class Gudang extends MY_Controller {
                 $no++;
                 $row = array();
                 $row[] = $no;
+                $row[] = $rowdata->idgudang;
                 $row[] = $rowdata->namagudang;
                 $row[] = $rowdata->alamatgudang;
                 $row[] = $rowdata->notelpgudang.'<br>'.$rowdata->emailgudang;

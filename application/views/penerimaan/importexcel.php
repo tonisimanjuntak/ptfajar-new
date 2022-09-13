@@ -75,15 +75,21 @@
                       
                       <h3>Preview Data</h3>
                       <div class="alert alert-danger" role="alert" style="display: none;" id="kosong">
-                        Semua data belum diisi, Ada <span id='jumlah_kosong'></span> data yang belum diisi (Yang berwarna Merah wajib diisi).
+                        Semua data belum diisi dengan benar, Ada <span id='jumlah_kosong'></span> data yang belum diisi dengan benar (Yang berwarna Merah wajib diisi).
                       </div>
                       <div class="table-responsive">
                         <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th style='width: 5%; text-align: center;'>Kode Akun</th>
-                              <th>Nama Akun</th>
-                              <th>Parent Akun</th>
+                              <th style='width: 5%; text-align: center;'>No</th>
+                              <th>Tgl Penerimaan</th>
+                              <th>Deskripsi</th>
+                              <th>idgudang</th>
+                              <th>JenisPenerimaan</th>
+                              <th>KodeAkun</th>
+                              <th>JumahBarang</th>
+                              <th>HargaBeli</th>
+                              <th>TotalHarga</th>
                             </tr>                            
                           </thead>
                           <tbody>
@@ -97,71 +103,153 @@
                               $jenispenerimaanAllowed = array('Pembelian', 'Barang Masuk');
                               $tglpenerimaan_old = '';
                               $jenispenerimaan_old = '';
+                              $idgudang_old='';
+                              $idpenerimaan_old='';
 
-                              foreach($sheet as $row){ 
-                                $nourut = $row[0]; 
-                                $tglpenerimaan = $row[1];
-                                $deskripsi = $row[2];  
-                                $idgudang = $row[3];  
-                                $jenispenerimaan = $row[4];  
-                                $kodeakun = $row[5];  
-                                $jumlahbarang = $row[6];  
-                                $hargabeli = $row[7];  
-
-                                if(empty($kodeakun))
-                                  continue; 
-                                
-                                if($numrow > 1){ 
-
-                                  $tglpenerimaan_td = '';
-                                  $jenispenerimaan_td = '';
-                                  $jumlahbarang_td = '';
-                                  $hargabeli_td = '';
-                                  $idgudang_td = '';
-
-                                  //header boleh kosong
-                                  $nourut = (empty($nourut)) ? $nourut_old : date('Y-m-d', strtotime($nourut));
-                                  $tglpenerimaan = (empty($tglpenerimaan)) ? $tglpenerimaan_old : date('Y-m-d', strtotime($tglpenerimaan));
-
-                                  if (empty($tglpenerimaan) && empty($tglpenerimaan_old)) {
-                                    $tglpenerimaan_td = 'class="bg-danger"';   
-                                    $kosong++;
-                                  }
-
-                                  if (empty($jenispenerimaan) && empty($jenispenerimaan_old)) {
-                                    $jenispenerimaan_td = 'class="bg-danger"';   
-                                    $kosong++;
-                                  }
-
-                                  if ($jumlahbarang=='' || $jumlahbarang==0) {
-                                    $jumlahbarang_td = 'class="bg-danger"';   
-                                    $kosong++;
-                                  }
-
-                                  if ($hargabeli=='' || $hargabeli==0) {
-                                    $hargabeli_td = 'class="bg-danger"';   
-                                    $kosong++;
-                                  }
-
-                                  if (empty($idgudang)) {
-                                    $idgudang_td = 'class="bg-danger"';                                       
-                                    $kosong++;
-                                  }
-                                  
-
-                                  if(empty($kodeakun) or empty($namaakun) or (empty($parentakun) and strlen($kodeakun)>1) ){
-                                    $kosong++;  // Tambah 1 variabel $kosong
-                                  }
-                                  
-                                  echo "<tr>
-                                            <td ".$idgudang_td.">".$kodeakun."</td>
-                                            <td ".$namaakun_td.">".$namaakun."</td>
-                                            <td ".$parentakun_td.">".$parentakun."</td>
-                                        </tr>";
+                              $rsGudang = $this->db->query("select idgudang from gudang");
+                              $arrGudang = array();
+                              if ($rsGudang->num_rows()>0) {
+                                foreach ($rsGudang->result() as $row) {
+                                  $arrGudang[]=$row->idgudang;
                                 }
-                                
-                                $numrow++; 
                               }
+
+                              $rsAkunBarang = $this->App->get_akun_barang();
+                              $arrAkunBarang = array();
+                              if ($rsAkunBarang->num_rows()>0) {
+                                foreach ($rsAkunBarang->result() as $row) {
+                                  $arrAkunBarang[] = $row->kodeakun;
+                                }
+                              }
+
+                              $rsTemp = $this->db->query("select * from penerimaan_temp");
+                              $no = 1;
+                              if ($rsTemp->num_rows()>0) {
+                                foreach ($rsTemp->result() as $rowheader) {
+                                  
+                                  $idpenerimaan = $rowheader->idpenerimaan;
+                                  $tglpenerimaan = $rowheader->tglpenerimaan;
+                                  $deskripsi = $rowheader->deskripsi;  
+                                  $idgudang = $rowheader->idgudang;  
+                                  $jenispenerimaan = $rowheader->jenispenerimaan;  
+                                  $rsTempDetail = $this->db->query("select * from penerimaan_tempdetail where idpenerimaan=".$rowheader->idpenerimaan);
+                                  if ($rsTempDetail->num_rows()>0) {
+                                    foreach ($rsTempDetail->result() as $rowdetail) {
+                                      
+                                      $kodeakun = $rowdetail->kodeakun;  
+                                      $jumlahbarang = $rowdetail->jumlahbarang;  
+                                      $hargabeli = $rowdetail->hargabeli;  
+
+                                      if(empty($kodeakun))
+                                        continue; 
+                                      
+
+                                        $tglpenerimaan_td = '';
+                                        $jenispenerimaan_td = '';
+                                        $kodeakun_td = '';
+                                        $jumlahbarang_td = '';
+                                        $hargabeli_td = '';
+                                        $idgudang_td = '';
+
+                                        //header boleh kosong
+
+                                        if (empty($tglpenerimaan) && empty($tglpenerimaan_old)) {
+                                          $tglpenerimaan_td = 'class="bg-danger"';   
+                                          $kosong++;
+                                        }
+
+                                        if (empty($idgudang) && empty($idgudang_old)) {
+                                          $idgudang_td = 'class="bg-danger"';   
+                                          $kosong++;
+                                        }else{
+                                          if (!in_array($idgudang, $arrGudang)) {
+                                            $idgudang_td = 'class="bg-danger"';   
+                                            $kosong++;
+                                          }
+                                        }
+
+                                        if (empty($jenispenerimaan) && empty($jenispenerimaan_old)) {
+                                          $jenispenerimaan_td = 'class="bg-danger"';   
+                                          $kosong++;
+                                        }
+
+                                        if (!in_array($jenispenerimaan, $jenispenerimaanAllowed)) {
+                                          $jenispenerimaan_td = 'class="bg-danger"';   
+                                          $kosong++; 
+                                        }
+
+                                        if (empty($kodeakun)) {
+                                          $kodeakun_td = 'class="bg-danger"';   
+                                          $kosong++; 
+                                        }else{
+                                          $rsakun= $this->db->query("select * from akun where kodeakun='$kodeakun'");
+                                          if ($rsakun->num_rows()==0) {
+                                            $kodeakun_td = 'class="bg-danger"';           
+                                            $kosong++; 
+                                          }
+                                        }
+
+                                        if ($jumlahbarang=='' || $jumlahbarang==0) {
+                                          $jumlahbarang_td = 'class="bg-danger"';   
+                                          $kosong++;
+                                        }
+
+                                        if ($hargabeli=='' || $hargabeli==0) {
+                                          $hargabeli_td = 'class="bg-danger"';   
+                                          $kosong++;
+                                        }
+                                        
+                                        
+                                        if ($idpenerimaan!= $idpenerimaan_old) {
+                                          
+                                          echo "
+                                          <tr>
+                                            <td style='text-align: center;'>".$no++."</td>
+                                            <td ".$tglpenerimaan_td.">".$tglpenerimaan."</td>
+                                            <td>".$deskripsi."</td>
+                                            <td ".$idgudang_td.">".$idgudang."</td>
+                                            <td ".$jenispenerimaan_td.">".$jenispenerimaan."</td>
+                                            <td ".$kodeakun_td.">".$kodeakun."</td>
+                                            <td ".$jumlahbarang_td.">".$jumlahbarang."</td>
+                                            <td ".$hargabeli_td.">".$hargabeli."</td>
+                                            <td>".$jumlahbarang*$hargabeli."</td>
+                                          </tr>
+                                          ";
+
+
+                                        }else{
+                                          echo "
+                                          <tr>
+                                            <td style='text-align: center;'></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td ".$kodeakun_td.">".$kodeakun."</td>
+                                            <td ".$jumlahbarang_td.">".$jumlahbarang."</td>
+                                            <td ".$hargabeli_td.">".$hargabeli."</td>
+                                            <td>".$jumlahbarang*$hargabeli."</td>
+                                          </tr>
+                                          ";
+                                        }
+                                      
+                                      $numrow++; 
+                                      $idpenerimaan_old = $idpenerimaan;
+                                      $tglpenerimaan_old = $tglpenerimaan;
+                                      $jenispenerimaan_old = $jenispenerimaan;
+                                      $idgudang_old=$idgudang;
+                                    } // end foreach
+                                  } //end id numrows()
+
+
+                                  $idpenerimaan_old = $idpenerimaan;
+                                  $tglpenerimaan_old = $tglpenerimaan;
+                                  $jenispenerimaan_old = $jenispenerimaan;
+                                  $idgudang_old=$idgudang;
+                                  $no++;
+                                } // end foreach header
+                              }
+
                             ?>
                           </tbody>                        
                       </table>

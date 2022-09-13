@@ -11,6 +11,7 @@ class Penerimaan extends MY_Controller {
         parent::__construct();
         $this->authlogin();
         $this->load->model('Penerimaan_model');
+        $this->load->model('App');
     }
 
     public function index()
@@ -346,67 +347,71 @@ class Penerimaan extends MY_Controller {
     }
 
     public function simpan_import(){
-        $filename = 'penerimaan';
-        $inputFileName = './uploads/importexcel/'.$filename.'.xlsx';
-        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($inputFileName);
-        $sheet1 = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
-        $arrSheet = $sheet1->toArray();            
 
-        $data = array();        
-        $numrow = 1;
-        $kosong = 0;
+        $idpengguna = $this->session->userdata('idpengguna');
+        $created_at = date('Y-m-d H:i:s');
+        $updated_at = date('Y-m-d H:i:s');
+
+
+        $rsTemp = $this->db->query("select * from penerimaan_temp");
+        $no = 1;
+        if ($rsTemp->num_rows()>0) 
+        {
+            foreach ($rsTemp->result() as $rowheader) 
+            {
           
-        foreach($arrSheet as $row){ 
-            $kodeakun = $row[0]; 
-            $namaakun = $row[1];
-            $parentakun = $row[2];  
-            
-            if(empty($kodeakun))
-              continue;
+                $idpenerimaan = $rowheader->idpenerimaan;
+                $tglpenerimaan = $rowheader->tglpenerimaan;
+                $deskripsi = $rowheader->deskripsi;  
+                $idgudang = $rowheader->idgudang;  
+                $jenispenerimaan = $rowheader->jenispenerimaan;  
 
-            if($numrow == 1){
-                $numrow++;
-                continue;
-            } 
+                $jumlahpenerimaan = $this->db->query("select sum(totalharga) as jumlahpenerimaan from penerimaan_tempdetail where idpenerimaan=".$rowheader->idpenerimaan)->row()->jumlahpenerimaan;
 
-            $rsakun = $this->Akun_model->get_by_id($kodeakun);
-            if ($rsakun->num_rows()>0) {
-                    $pesan = '<script>swal("Gagal!", "Kode akun '.$kodeakun.' sudah ada!", "error")</script>';
-                    $this->session->set_flashdata('pesan', $pesan);
-                    redirect('penerimaan');
-                    break;
-            }
+                $idpenerimaan = $this->db->query("select create_idpenerimaan('".date('Y-m-d')."') as idpenerimaan ")->row()->idpenerimaan;
 
-
-            if (empty($parentakun)) {
-                $parentakun = NULL;
-                $level = 1;
-            }else{
-                $rsparent = $this->Akun_model->get_by_id($parentakun);
-                if ($rsparent->num_rows()<1) {
-                    $pesan = '<script>swal("Gagal!", "Parent akun '.$kodeakun.' tidak ditemukan!", "error")</script>';
-                    $this->session->set_flashdata('pesan', $pesan);
-                    redirect('penerimaan');
-                    break;
-                }
-                $levelparent = $rsparent->row()->level;
-                $level = $levelparent + 1;            
-            }
-
-            array_push($data, array(
-                                    'kodeakun' => $kodeakun, 
-                                    'namaakun' => $namaakun, 
-                                    'parentakun' => $parentakun, 
-                                    'jumlahpersediaan' => 0, 
-                                    'level' => $level
-                                ));
-            $numrow++; 
-        }
+                $arrayhead = array(
+                        'idpenerimaan' => $idpenerimaan,
+                        'tglpenerimaan' => $tglpenerimaan,
+                        'deskripsi' => $deskripsi,
+                        'idgudang' => $idgudang,
+                        'jenispenerimaan' => $jenispenerimaan,
+                        'jumlahpenerimaan' => $jumlahpenerimaan,
+                        'created_at' => $created_at,
+                        'updated_at' => $updated_at,
+                        'idpengguna' => $idpengguna
+                        );
 
 
-        $simpan = $this->Akun_model->simpan_import($data);
+                $rsTempDetail = $this->db->query("select * from penerimaan_tempdetail where idpenerimaan=".$rowheader->idpenerimaan);
+                if ($rsTempDetail->num_rows()>0) 
+                {
+                    $i=0;
+                    $arraydetail=array();       
+                    foreach ($rsTempDetail->result() as $rowdetail) 
+                    {
+                        
+                        $detail = array(
+                                        'idpenerimaan' => $idpenerimaan,
+                                        'kodeakun' => $rowdetail->kodeakun,
+                                        'jumlahbarang' => $rowdetail->jumlahbarang,
+                                        'hargabeli' => $rowdetail->hargabeli,
+                                        'hargajual' => $rowdetail->hargajual,
+                                        'totalharga' => $rowdetail->totalharga,
+                                        );
+
+                        array_push($arraydetail, $detail);              
+                        $i++;
+
+                    } //end foreach
+                } //endif
+
+                $simpan  = $this->Penerimaan_model->simpan($arrayhead, $arraydetail, $idpenerimaan);
+
+            } //end foreaceh
+        } //endif
+
+
         if ($simpan) {
             $pesan = '<script>swal("Berhasil!", "Data berhasil disimpan.", "success")</script>';
         }else{

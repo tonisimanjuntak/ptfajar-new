@@ -220,7 +220,7 @@ class Penerimaan_model extends CI_Model {
       $numrow = 1;
       $kosong = 0;
       
-      $this->db->query("delete from penerimaandetail_temp");
+      $this->db->query("delete from penerimaan_tempdetail");
       $this->db->query("delete from penerimaan_temp");
 
       $jenispenerimaanAllowed = array('Pembelian', 'Barang Masuk');
@@ -240,6 +240,7 @@ class Penerimaan_model extends CI_Model {
         $kodeakun = $row[5];  
         $jumlahbarang = $row[6];  
         $hargabeli = $row[7];  
+        $totalharga = (int)$jumlahbarang*(int)$hargabeli;
 
         if($numrow > 1){ 
 
@@ -249,25 +250,23 @@ class Penerimaan_model extends CI_Model {
             if (empty($nourut) && empty($tglpenerimaan) && empty($deskripsi) && empty($idgudang) && empty($jenispenerimaan) && empty($kodeakun) && empty($jumlahbarang) && empty($hargabeli)) 
                 continue;
 
-            if (empty($nourut_old) && empty($nourut)) 
-                continue;
+            // if (empty($nourut_old) && empty($nourut)) 
+            //     continue;
 
 
             if ($nourut!=$nourut_old && $nourut != "") {
 
                 if (count($arraydetail)>0) {
-                    $this->db->insert_batch('penerimaandetail_temp', $arraydetail);
+                    $this->db->insert_batch('penerimaan_tempdetail', $arraydetail);
                 }
 
                 $arrayhead = array(
-                        'tglpenerimaan' => date('Y-m-d', $tglpenerimaan),
+                        'tglpenerimaan' => date('Y-m-d', strtotime($tglpenerimaan)),
                         'deskripsi' => $deskripsi,
                         'idgudang' => $idgudang,
                         'jenispenerimaan' => $jenispenerimaan,
                         'jumlahpenerimaan' => 0
                 );
-                var_dump($arrayhead);
-                exit();
                 $this->db->insert('penerimaan_temp', $arrayhead);
                 $idpenerimaan = $this->db->insert_id();
                 $arraydetail = array(); 
@@ -291,7 +290,7 @@ class Penerimaan_model extends CI_Model {
       }
 
       if (count($arraydetail)>0) {
-            $this->db->insert_batch('penerimaandetail_temp', $arraydetail);
+            $this->db->insert_batch('penerimaan_tempdetail', $arraydetail);
         }
     }
 
