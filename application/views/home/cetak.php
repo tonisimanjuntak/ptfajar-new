@@ -61,7 +61,7 @@ class MYPDF extends TCPDF {
 
         
 // create new PDF document
-$pdf = new MYPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+$pdf = new MYPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
 
 $pdf->AddPage();
 
@@ -132,126 +132,35 @@ $table .= '
 </style>
 ';
 
-$table  .= '<table border="0" width="100%" cellpadding="5">
-                <thead>
-                    <tr>
-                        <th style="width: 15%;">Divisi/ Bagian</th>
-                        <th style="width: 5%;">:</th>
-                        <th style="width: 40%">'.$namagudang.'</th>
-                        <th style="width: 20%;">Tanggal Pengeluaran</th>
-                        <th style="width: 5%;">:</th>
-                        <th style="width: 15%;">'.tglindonesia($rowpengeluaran->tglpengeluaran).'</th>
-                    </tr>
-                    <tr>
-                        <th style="width: 15%;">Tanggal Permintaan</th>
-                        <th style="width: 5%;">:</th>
-                        <th style="width: 40%"></th>
-                        <th style="width: 20%;">Nomor</th>
-                        <th style="width: 5%;">:</th>
-                        <th style="width: 15%;">'.$rowpengeluaran->idpengeluaran.'</th>
-                    </tr>
-                </thead>
-            </table>';
-
-$table .= '<H1 style="text-align: center;">BON PERMINTAAN DAN PENGELUARAN BARANG</H1>';
+$table .= '<H1 style="text-align: center;">MOVING AVERAGE HARGA BELI BARANG</H1>';
+$table .= '<span style="text-align: center;">PERIODE '.strtoupper($periode).'</span>';
 
 $table  .= '<br><br><table border="1" width="100%" cellpadding="5">';
 $table .= ' 
             <thead>
                 <tr style="font-size:12px; font-weight:bold;">
-                    <th style="text-align:center;" width="5%" rowspan="2">No</th>
-                    <th style="text-align:center;" width="25%">Kode</th>
-                    <th style="text-align:center;" width="20%" rowspan="2">Jenis/ Spesifikasi</th>
-                    <th style="text-align:center;" width="10%" rowspan="2">Satuan</th>
-                    <th style="text-align:center;" width="20%">Jumlah</th>
-                    <th style="text-align:center;" width="20%" rowspan="2">Keterangan</th>
-                </tr>
-                <tr style="font-size:12px; font-weight:bold;">
-                    <th style="text-align:center;" width="10%">Pembe-banan</th>
-                    <th style="text-align:center;" width="15%">Barang</th>
-                    <th style="text-align:center;" width="10%">Diminta</th>
-                    <th style="text-align:center;" width="10%">Dike-luarkan</th>
+                    <th style="text-align:center;" width="5%">No</th>
+                    <th style="text-align:center;" width="30%">Nama Barang</th>
+                    <th style="text-align:center;" width="5%">Jan</th>
+                    <th style="text-align:center;" width="5%">Feb</th>
+                    <th style="text-align:center;" width="5%">Mar</th>
+                    <th style="text-align:center;" width="5%">Apr</th>
+                    <th style="text-align:center;" width="5%">Mei</th>
+                    <th style="text-align:center;" width="5%">Jun</th>
+                    <th style="text-align:center;" width="5%">Jul</th>
+                    <th style="text-align:center;" width="5%">Ags</th>
+                    <th style="text-align:center;" width="5%">Sep</th>
+                    <th style="text-align:center;" width="5%">Okt</th>
+                    <th style="text-align:center;" width="5%">Nov</th>
+                    <th style="text-align:center;" width="5%">Des</th>
+                    <th style="text-align:center;" width="5%">MA</th>
                 </tr>
             </thead>
             <tbody>';
 
-$total = 0;
-$spasi = str_repeat('&nbsp;', 10);
-$no=1;
-
-if ($rsdetail->num_rows() > 0) {
-    
-    foreach ($rsdetail->result() as $row) {
-
-        $table .= '
-                <tr style="font-size:11px;">
-                    <td style="text-align:center;" width="5%">'.$no++.'</td>
-                    <td style="text-align:center;" width="10%"></td>
-                    <td style="text-align:center;" width="15%">'.$row->kodeakun.'</td>
-                    <td style="text-align:left;" width="20%">'.$row->namaakun.'</td>
-                    <td style="text-align:center;" width="10%"></td>
-                    <td style="text-align:center;" width="10%"></td>
-                    <td style="text-align:center;" width="10%">'.format_rupiah($row->jumlahbarang).'</td>
-                    <td style="text-align:left;" width="20%"></td>
-                </tr>
-        ';
-        
-
-        $total += $row->totalharga;
-    }
-
-}else{
-
-    $table .='          
-                <tr style="font-size:11px;">
-                    <td style="text-align:center;" width="100%" colspan="8">Data Tidak Ada . . .</td>                   
-                </tr>';
-}
-            
-
 
 $table .= ' </tbody>
             </table>';
-
-
-
-$table  .= '<br><br><table border="0" width="100%" cellpadding="5">
-                <tbody>
-                    <tr style="font-size: 11px;">
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Disetujui</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Diperiksa</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Dibuat</td>
-                        <td style="width: 25%; text-align:center;"></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Dikeluarkan</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Diterima</td>
-                    </tr>
-                    <tr style="font-size: 11px;">
-                        <td style="width: 15%; text-align:center;" class="add-border-all"><br><br><br></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all"></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all"></td>
-                        <td style="width: 25%; text-align:center;"></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all"></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all"></td>
-                    </tr>
-                    <tr style="font-size: 11px;">
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Manager</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Asst. Administrasi</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Asisten</td>
-                        <td style="width: 25%; text-align:center;"></td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all">Logistik</td>
-                        <td style="width: 15%; text-align:center;" class="add-border-all"></td>
-                    </tr>
-                </tbody>
-            </table>';
-
-$table .= '
-    <br><br><br>
-    <span>Catatan:</span><br>
-    <span>- Penanggung jawab penerima barang adalah Asisten</span><br>
-    <span>- Dalam penerimaan barang dapat diwakilkan Krani/ Mandor</span><br>
-    <span>- Jika terdapat permintaan pembelian lokal, maka format ini</span><br>
-    <span>   berfungsi sebagai permohonan PPL</span><br>
-';
 
 
 $pdf->SetTopMargin(35);

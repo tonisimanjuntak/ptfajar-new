@@ -59,51 +59,57 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-6">
+                    <div class="row" style="font-size: 12px;">
+                      <div class="col-md-5">
                         
-                        <div class="form-group">
-                            <label for="">Nama Akun</label>
-                            <select name="kodeakun" id="kodeakun" class="form-control select2">
-                              <option value="">Semua barang...</option>
-                              <?php
-                                $kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
-                                $nlen = strlen($kodeakunbarang);
-                                $level = $this->db->query("select max(level) as level from akun")->row()->level;
-                                $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
-                                if ($rsakun->num_rows()>0) {
-                                  
-                                  foreach ($rsakun->result() as $row) {
-                                    echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
-                                  }
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 col-form-label">Akun</label>
+                            <div class="col-md-10">                              
+                              <select name="kodeakun" id="kodeakun" class="form-control select2">
+                                <option value="">Semua barang...</option>
+                                <?php
+                                  $kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
+                                  $nlen = strlen($kodeakunbarang);
+                                  $level = $this->db->query("select max(level) as level from akun")->row()->level;
+                                  $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
+                                  if ($rsakun->num_rows()>0) {
+                                    
+                                    foreach ($rsakun->result() as $row) {
+                                      echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
+                                    }
 
-                                }
-                              ?>  
-                            </select>
+                                  }
+                                ?>  
+                              </select>
+                            </div>
                         </div>
 
                       </div>
+
+                      <div class="col-7">
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 col-form-label text-right">Periode</label>
+                          <div class="col-md-4">
+                            <input type="date" name="tglawalMA" id="tglawalMA" class="form-control" value="<?php echo date('Y-01-01') ?>">
+                          </div>
+                          <label for="" class="col-md-1 col-form-label text-center">s/d</label>
+                          <div class="col-md-4">
+                            <input type="date" name="tglakhirMA" id="tglakhirMA" class="form-control" value="<?php echo date('Y-m-d') ?>">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 text-center mb-5">
+                            <button class="btn btn-info">Refresh</button>
+                            <a href="" class="btn btn-primary" id="btnCetakMA">Cetak</a>
+                        
+                      </div>
+
                       <div class="col-12">
                         
                         <div class="position-relative mb-4">
-                          <canvas id="visitors-chart" height="200"></canvas>
+                          <canvas id="visitors-chart" height="300"></canvas>
                         </div>
 
-                      </div>
-                      <div class="col-12">
-                        <div class="form-group row">
-                          <label for="" class="col-md-5 col-form-label text-right">Tanggal Periode</label>
-                          <div class="col-md-2">
-                            <input type="date" name="tglawalMA" id="tglawalMA" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                          </div>
-                          <label for="" class="col-md-1 col-form-label text-center">s/d</label>
-                          <div class="col-md-2">
-                            <input type="date" name="tglakhirMA" id="tglakhirMA" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                          </div>
-                          <div class="col-md-2 text-center">
-                            <a href="" class="btn btn-primary" id="btnCetakMA"><i class="fa fa-print"></i> Cetak</a>
-                          </div>
-                        </div>
                       </div>
                     </div>
 

@@ -121,8 +121,14 @@ class Home extends MY_Controller {
 		error_reporting(0);
         $this->load->library('Pdf');
 
+        if ($kodeakun=='-') {
+        	$kodeakun = '';
+        }
 
         $rowpengaturan = $this->db->query("select * from pengaturan")->row();
+        $rsMovingAverage = $this->Home_model->getchartakunpertanggal($tglawal, $tglakhir, $kodeakun);
+        var_dump($rsMovingAverage->result());
+        exit();
 
         $data['rowpengaturan'] = $rowpengaturan;
         $data['tglawal'] = $tglawal;

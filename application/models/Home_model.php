@@ -18,25 +18,66 @@ class Home_model extends CI_Model {
 		if (empty($tahun)) {
 			$tahun = date('Y');
 		}
+		$where_akun = '';
+		if (!empty($kodeakun)) {
+			$where_akun = " where kodeakun='$kodeakun' ";
+		}
         $query = "
         SELECT 
-    	SUM( CASE WHEN MONTH(tglpengeluaran)=1 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln01,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=1 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln01,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=2 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln02,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=3 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln03,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=4 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln04,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=5 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln05,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=6 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln06,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=7 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln07,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=8 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln08,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=9 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln09,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=10 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln10,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=11 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln11,
-		SUM( CASE WHEN MONTH(tglpengeluaran)=12 AND YEAR(tglpengeluaran)='$tahun' THEN hargajual ELSE 0 END ) AS bln12	
-	FROM v_pengeluarandetail where kodeakun='$kodeakun'
-        	";
+    	SUM( CASE WHEN MONTH(tglpenerimaan)=1 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln01,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=1 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln01,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=2 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln02,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=3 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln03,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=4 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln04,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=5 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln05,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=6 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln06,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=7 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln07,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=8 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln08,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=9 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln09,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=10 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln10,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=11 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln11,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=12 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln12	
+	FROM v_penerimaandetail ".$where_akun;
        return $this->db->query($query);
 	}	
+
+
+
+	public function getchartakunpertanggal($tglawal='', $tglakhir='', $kodeakun='')
+	{
+
+		if (!empty($tglawal) and !empty($tglakhir)) {
+			$tahun = date('Y', strtotime($tglawal));
+			$and_where .= " and tglpenerimaan between '".date('Y-m-d', strtotime($tglawal))."' and '".date('Y-m-d', strtotime($tglakhir))."' ";
+		}else{
+			$tahun = date('Y');
+		}
+
+		if (!empty($kodeakun)) {
+			$and_where .= " and kodeakun='$kodeakun' ";
+		}
+
+        $query = "
+        SELECT akun.kodeakun, akun.namaakun,
+    	SUM( CASE WHEN MONTH(tglpenerimaan)=1 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln01,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=1 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln01,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=2 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln02,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=3 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln03,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=4 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln04,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=5 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln05,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=6 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln06,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=7 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln07,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=8 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln08,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=9 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln09,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=10 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln10,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=11 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln11,
+		SUM( CASE WHEN MONTH(tglpenerimaan)=12 AND YEAR(tglpenerimaan)='$tahun' THEN hargabeli ELSE 0 END ) AS bln12	
+		FROM akun LEFT JOIN v_penerimaandetail ON akun.kodeakun=v_penerimaandetail.kodeakun
+			WHERE LEFT(akun.kodeakun,2)='13' AND akun.level=4 ".$and_where." GROUP BY akun.kodeakun, akun.namaakun";
+       return $this->db->query($query);
+	}	
+
+
 
 }
 
