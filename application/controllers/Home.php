@@ -13,7 +13,7 @@ class Home extends MY_Controller {
 	public function index()
 	{
 		$data["menu"] = "home";	
-		$this->load->view("home", $data);
+		$this->load->view("home/index", $data);
 	}
 
 
@@ -112,6 +112,25 @@ class Home extends MY_Controller {
 	    return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
 	}
 
+	public function cetakMA()
+	{
+		$tglawal = $this->uri->segment(3);
+		$tglakhir = $this->uri->segment(4);
+		$kodeakun = $this->uri->segment(5);
+
+		error_reporting(0);
+        $this->load->library('Pdf');
+
+
+        $rowpengaturan = $this->db->query("select * from pengaturan")->row();
+
+        $data['rowpengaturan'] = $rowpengaturan;
+        $data['tglawal'] = $tglawal;
+        $data['tglakhir'] = $tglakhir;
+        $data['kodeakun'] = $kodeakun;
+        $data['tahunperiode'] = date('Y', strtotime($tglawal));
+        $this->load->view('home/cetak', $data);        
+	}
 }
 
 /* End of file Home.php */

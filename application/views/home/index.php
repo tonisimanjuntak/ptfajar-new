@@ -71,19 +71,42 @@
                                 $nlen = strlen($kodeakunbarang);
                                 $level = $this->db->query("select max(level) as level from akun")->row()->level;
                                 $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
-                                foreach ($rsakun->result() as $row) {
-                                  echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
+                                if ($rsakun->num_rows()>0) {
+                                  
+                                  foreach ($rsakun->result() as $row) {
+                                    echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
+                                  }
+
                                 }
                               ?>  
                             </select>
                         </div>
 
                       </div>
+                      <div class="col-12">
+                        
+                        <div class="position-relative mb-4">
+                          <canvas id="visitors-chart" height="200"></canvas>
+                        </div>
+
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group row">
+                          <label for="" class="col-md-5 col-form-label text-right">Tanggal Periode</label>
+                          <div class="col-md-2">
+                            <input type="date" name="tglawalMA" id="tglawalMA" class="form-control" value="<?php echo date('Y-m-d') ?>">
+                          </div>
+                          <label for="" class="col-md-1 col-form-label text-center">s/d</label>
+                          <div class="col-md-2">
+                            <input type="date" name="tglakhirMA" id="tglakhirMA" class="form-control" value="<?php echo date('Y-m-d') ?>">
+                          </div>
+                          <div class="col-md-2 text-center">
+                            <a href="" class="btn btn-primary" id="btnCetakMA"><i class="fa fa-print"></i> Cetak</a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    <div class="position-relative mb-4">
-                      <canvas id="visitors-chart" height="200"></canvas>
-                    </div>
 
                   </div>
                 </div>
@@ -211,6 +234,18 @@ function getchartbarangkeluar(kodeakun='')
   $('#kodeakun').change(function() {
     var kodeakun = $(this).val();
     getchartbarangkeluar(kodeakun);
+  });
+
+  $('#btnCetakMA').click(function(e) {
+    e.preventDefault();
+    var tglawalMA = $('#tglawalMA').val();
+    var tglakhirMA = $('#tglakhirMA').val();
+    var kodeakun = $('#kodeakun').val();
+  
+    if (kodeakun=="") {
+      kodeakun = "-";
+    }
+    window.open("<?php echo site_url('home/cetakMA/') ?>"+tglawalMA+'/'+tglakhirMA+'/'+kodeakun);    
   });
 </script>
 
