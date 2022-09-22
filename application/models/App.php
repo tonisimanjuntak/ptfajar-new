@@ -48,6 +48,47 @@ class App extends CI_Model {
         }
     }
 
+    public function hapusSemuaTransaksi()
+    {
+        $this->db->trans_begin();
+
+        $this->db->query("delete from kartustok");
+
+        $this->db->query("delete from jurnaldetail");
+        $this->db->query("delete from jurnal");
+
+        $this->db->query("delete from pengeluaranstatusterkirim");
+        $this->db->query("delete from pengeluaran_tempdetail");
+        $this->db->query("delete from pengeluaran_temp");
+        $this->db->query("delete from pengeluarandetail");
+        $this->db->query("delete from pengeluaran");
+
+        $this->db->query("delete from penerimaan_tempdetail");
+        $this->db->query("delete from penerimaan_temp");
+        $this->db->query("delete from penerimaandetail");
+        $this->db->query("delete from penerimaan");
+        
+        $this->db->query("delete from stokopnamedetail");
+        $this->db->query("delete from stokopname");
+
+        $this->db->query("delete from saldoawaldetail");
+        $this->db->query("delete from saldoawal");
+
+        $this->db->query("delete from postingjurnal");
+
+        $this->db->query("delete from penandatangan");
+
+        $this->db->query("delete from akun");
+
+        if ($this->db->trans_status() === FALSE){
+                $this->db->trans_rollback();
+                return false;
+        }else{
+                $this->db->trans_commit();
+                return true;
+        }
+    }
+
 }
 
 /* End of file App.php */

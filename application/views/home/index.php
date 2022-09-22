@@ -68,17 +68,24 @@
                               <select name="kodeakun" id="kodeakun" class="form-control select2">
                                 <option value="">Semua barang...</option>
                                 <?php
-                                  $kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
-                                  $nlen = strlen($kodeakunbarang);
-                                  $level = $this->db->query("select max(level) as level from akun")->row()->level;
-                                  $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
-                                  if ($rsakun->num_rows()>0) {
-                                    
-                                    foreach ($rsakun->result() as $row) {
-                                      echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
-                                    }
 
+                                  $cekakun = $this->db->query("select * from akun");
+                                  if ($cekakun->num_rows()>0) {
+                                    
+                                    $kodeakunbarang = $this->db->query("select kodeakunbarang from pengaturan")->row()->kodeakunbarang;
+                                    $nlen = strlen($kodeakunbarang);
+                                    $level = $this->db->query("select max(level) as level from akun")->row()->level;
+                                    $rsakun = $this->db->query("select * from akun where left(kodeakun, ".$nlen.")  = '".$kodeakunbarang."' and level=".$level." order by kodeakun");
+                                    if ($rsakun->num_rows()>0) {
+                                      
+                                      foreach ($rsakun->result() as $row) {
+                                        echo '<option value="'.$row->kodeakun.'">'.$row->kodeakun.' '.$row->namaakun.'</option>';
+                                      }
+
+                                    }
+                                    
                                   }
+
                                 ?>  
                               </select>
                             </div>

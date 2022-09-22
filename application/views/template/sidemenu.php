@@ -245,6 +245,16 @@
             </ul>
           </li>
 
+
+          <li class="nav-item">
+            <a href="<?php echo(site_url('Hapustransaksi')) ?>" class="nav-link <?php echo ($menu=='hapustransaksi') ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-times text-danger"></i>
+              <p>
+                Hapus Transaksi
+              </p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="<?php echo(site_url('Login/keluar')) ?>" class="nav-link text-warning">
               <i class="nav-icon fas fa-sign-out-alt"></i>
