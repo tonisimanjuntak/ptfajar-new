@@ -351,13 +351,29 @@ if (!defined('BASEPATH'))
 		return $chrreturn;
 	}
 
-	function get_saldo_normal($kdakun)
+	function get_saldo_normal($kodeakun)
 	{
-		if ( substr($kdakun, 0,1)=='1' || substr($kdakun, 0,1)=='5' ) {
-			return 'D';
-		}else{
-			return 'K';
+		$arrSN_Debet = array('1', '2', '7', '8');
+		$arrSN_Kredit = array('3', '4', '5');
+		$saldoNormal = 'K';
+
+		if (in_array(substr($kodeakun, 0,1), $arrSN_Debet)) {
+			$saldoNormal = 'D';
 		}
+
+		if (in_array(substr($kodeakun, 0,1), $arrSN_Kredit)) {
+			$saldoNormal = 'K';
+		}
+
+		if (substr($kodeakun,0,1)=='9') {
+			if (substr($kodeakun,0,2)=='91') {
+				$saldoNormal = 'K';
+			}else{
+				$saldoNormal = 'D';
+			}
+		}
+
+		return $saldoNormal;
 	}
 
 

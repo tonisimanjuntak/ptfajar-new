@@ -156,6 +156,7 @@ class Pengguna extends MY_Controller {
                             'password'   => md5($password), 
                             'created_at'   => $created_at, 
                             'updated_at'   => $updated_at, 
+                            'statusaktif' => 'Aktif'
                         );
             $simpan = $this->Pengguna_model->simpan($data);      
         }else{ 
@@ -164,6 +165,8 @@ class Pengguna extends MY_Controller {
             $foto = $this->update_upload_foto($_FILES, "file", $file_lama);
 
             if (!empty($password)) {
+                // echo $password;
+                // exit();
                 $data = array(
                             'namapengguna'   => $namapengguna, 
                             'jeniskelamin'   => $jeniskelamin, 
@@ -175,6 +178,7 @@ class Pengguna extends MY_Controller {
                             'username'   => $username, 
                             'password'   => md5($password), 
                             'updated_at'   => $updated_at,                      
+                            'statusaktif' => 'Aktif'
                         );
             }else{
                 $data = array(
@@ -187,6 +191,7 @@ class Pengguna extends MY_Controller {
                             'fotouser'   => $foto, 
                             'username'   => $username, 
                             'updated_at'   => $updated_at,                      
+                            'statusaktif' => 'Aktif'
                         );
             }
             

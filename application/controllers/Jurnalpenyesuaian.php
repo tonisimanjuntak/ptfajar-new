@@ -255,7 +255,7 @@ class Jurnalpenyesuaian extends MY_Controller {
     public function akun4_autocomplate()
     {
         $cari= $this->input->post('term');
-        $query = "SELECT * FROM v_akun_level_max WHERE 
+        $query = "SELECT * FROM v_akun_jurnal WHERE 
             ( kodeakun like '%".$cari."%' or namaakun like '%".$cari."%' ) order by kodeakun asc limit 10";
         $res = $this->db->query($query);
         $result = array();

@@ -140,25 +140,71 @@ $table .= '
             <thead>
                 <tr style="font-size:12px; font-weight:bold;">
                     <th style="text-align:center;" width="5%">No</th>
-                    <th style="text-align:center;" width="30%">Nama Barang</th>
-                    <th style="text-align:center;" width="5%">Jan</th>
-                    <th style="text-align:center;" width="5%">Feb</th>
-                    <th style="text-align:center;" width="5%">Mar</th>
-                    <th style="text-align:center;" width="5%">Apr</th>
-                    <th style="text-align:center;" width="5%">Mei</th>
-                    <th style="text-align:center;" width="5%">Jun</th>
-                    <th style="text-align:center;" width="5%">Jul</th>
-                    <th style="text-align:center;" width="5%">Ags</th>
-                    <th style="text-align:center;" width="5%">Sep</th>
-                    <th style="text-align:center;" width="5%">Okt</th>
-                    <th style="text-align:center;" width="5%">Nov</th>
-                    <th style="text-align:center;" width="5%">Des</th>
-                    <th style="text-align:center;" width="5%">MA</th>
+                    <th style="text-align:center;" width="18%">Nama Barang</th>
+                    <th style="text-align:center;" width="6%">Jan</th>
+                    <th style="text-align:center;" width="6%">Feb</th>
+                    <th style="text-align:center;" width="6%">Mar</th>
+                    <th style="text-align:center;" width="6%">Apr</th>
+                    <th style="text-align:center;" width="6%">Mei</th>
+                    <th style="text-align:center;" width="6%">Jun</th>
+                    <th style="text-align:center;" width="6%">Jul</th>
+                    <th style="text-align:center;" width="6%">Ags</th>
+                    <th style="text-align:center;" width="6%">Sep</th>
+                    <th style="text-align:center;" width="6%">Okt</th>
+                    <th style="text-align:center;" width="6%">Nov</th>
+                    <th style="text-align:center;" width="6%">Des</th>
+                    <th style="text-align:center;" width="6%">MA</th>
                 </tr>
             </thead>
             <tbody>';
 
+if ($rsMovingAverage->num_rows()>0) {
+    $no=1;
+    $pembagi = 0;
 
+    foreach ($rsMovingAverage->result() as $row) {
+        if ($row->bln01>0) { $pembagi++; }
+        if ($row->bln02>0) { $pembagi++; }
+        if ($row->bln03>0) { $pembagi++; }
+        if ($row->bln04>0) { $pembagi++; }
+        if ($row->bln05>0) { $pembagi++; }
+        if ($row->bln06>0) { $pembagi++; }
+        if ($row->bln07>0) { $pembagi++; }
+        if ($row->bln08>0) { $pembagi++; }
+        if ($row->bln09>0) { $pembagi++; }
+        if ($row->bln10>0) { $pembagi++; }
+        if ($row->bln11>0) { $pembagi++; }
+        if ($row->bln12>0) { $pembagi++; }
+        
+        $totalBulan = $row->bln01 + $row->bln02 + $row->bln03 + $row->bln04 + $row->bln05 
+                        + $row->bln06 + $row->bln07 + $row->bln08 + $row->bln09 + $row->bln10 
+                        + $row->bln11 + $row->bln12;
+        $jumlahMA = 0;
+        if ($pembagi>0) {
+            $jumlahMA = $totalBulan / $pembagi;            
+        }
+
+        $table .= '
+            <tr style="font-size:11px;">
+                <td style="text-align:center;" width="5%">'.$no++.'</td>
+                <td style="text-align:left;" width="18%">'.$row->namaakun.'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln01).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln02).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln03).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln04).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln06).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln06).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln07).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln08).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln09).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln10).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln11).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($row->bln12).'</td>
+                <td style="text-align:right;" width="6%">'.format_rupiah($jumlahMA).'</td>
+            </tr>
+        ';
+    }
+}
 $table .= ' </tbody>
             </table>';
 

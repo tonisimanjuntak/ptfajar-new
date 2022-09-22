@@ -31,14 +31,21 @@ class Lappenerimaan extends CI_Controller {
         $jeniscetakan       = $this->uri->segment(3);
         $tglawal 			= date('Y-m-d', strtotime($this->uri->segment(4))) ;
         $tglakhir 			= date('Y-m-d', strtotime($this->uri->segment(5))) ;
-        $kodeakun       	= $this->uri->segment(6);
+        $idgudang       	= $this->uri->segment(6);
+        $kodeakun       	= $this->uri->segment(7);
 
         $wherekodeakun = '';
         if ($kodeakun!='-') {
         	$wherekodeakun = " and kodeakun like '%".$kodeakun."%' ";
         }
+
+        $whereidgudang = '';
+        if ($idgudang!='-') {
+        	$whereidgudang = " and idgudang like '%".$idgudang."%' ";
+        }
+
         $rsdetail			= $this->db->query("
-        								select * from v_penerimaandetail2 where tglpenerimaan between '$tglawal' and '$tglakhir' ".$wherekodeakun." order by v_penerimaandetail2.tglpenerimaan, v_penerimaandetail2.idpenerimaan, v_penerimaandetail2.kodeakun
+        								select * from v_penerimaandetail2 where tglpenerimaan between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun." order by v_penerimaandetail2.tglpenerimaan, v_penerimaandetail2.idpenerimaan, v_penerimaandetail2.kodeakun
         							");
         
 

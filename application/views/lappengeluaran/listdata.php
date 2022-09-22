@@ -42,6 +42,25 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Gudang</label>
+                    <div class="col-md-9">
+                      <select name="idgudang" id="idgudang" class="form-control select2">
+                        <option value="-">Semua gudang...</option>
+                        <?php  
+                          $rsgudang = $this->db->query("select * from gudang order by namagudang");
+                          if ($rsgudang->num_rows()>0) {
+                            foreach ($rsgudang->result() as $row) {
+                              echo '
+                                <option value="'.$row->idgudang.'">'.$row->namagudang.'</option>
+                              ';
+                            }
+                          }
+                        ?>
+                      </select>
+                    </div>
+
+                </div>
+                <div class="form-group row">
                     <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Akun Barang</label>
                     <div class="col-md-9">
                       <select name="kodeakun" id="kodeakun" class="form-control select2">
@@ -100,6 +119,7 @@
         // fileter
         
         var kodeakun                 = $('#kodeakun').val();
+        var idgudang                 = $('#idgudang').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
 
@@ -109,7 +129,7 @@
           return;
         }
 
-        window.open("<?php echo site_url('lappengeluaran/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + kodeakun  + "/Lap Pengeluaran Barang");
+        window.open("<?php echo site_url('lappengeluaran/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + idgudang + '/' + kodeakun  + "/Lap Pengeluaran Barang");
     });
 
 
@@ -119,6 +139,7 @@
         // fileter
         
         var kodeakun                 = $('#kodeakun').val();
+        var idgudang                 = $('#idgudang').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
 
@@ -128,7 +149,7 @@
           return;
         }
 
-        window.open("<?php echo site_url('lappengeluaran/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + kodeakun + "/Lap Pengeluaran Barang");
+        window.open("<?php echo site_url('lappengeluaran/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + idgudang + '/' + kodeakun + "/Lap Pengeluaran Barang");
 
 
     });

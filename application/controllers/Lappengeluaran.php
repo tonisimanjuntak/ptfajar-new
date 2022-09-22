@@ -31,14 +31,23 @@ class Lappengeluaran extends CI_Controller {
         $jeniscetakan       = $this->uri->segment(3);
         $tglawal 			= date('Y-m-d', strtotime($this->uri->segment(4))) ;
         $tglakhir 			= date('Y-m-d', strtotime($this->uri->segment(5))) ;
-        $kodeakun       	= $this->uri->segment(6);
+        $idgudang       	= $this->uri->segment(6);
+        $kodeakun       	= $this->uri->segment(7);
+
+
 
         $wherekodeakun = '';
         if ($kodeakun!='-') {
         	$wherekodeakun = " and kodeakun like '%".$kodeakun."%' ";
         }
+
+        $whereidgudang = '';
+        if ($idgudang!='-') {
+        	$whereidgudang = " and idgudang like '%".$idgudang."%' ";
+        }
+
         $rsdetail			= $this->db->query("
-        								select * from v_pengeluarandetail2 where tglpengeluaran between '$tglawal' and '$tglakhir' ".$wherekodeakun." order by v_pengeluarandetail2.tglpengeluaran, v_pengeluarandetail2.idpengeluaran, v_pengeluarandetail2.kodeakun
+        								select * from v_pengeluarandetail2 where tglpengeluaran between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun." order by v_pengeluarandetail2.tglpengeluaran, v_pengeluarandetail2.idpengeluaran, v_pengeluarandetail2.kodeakun
         							");
         
 

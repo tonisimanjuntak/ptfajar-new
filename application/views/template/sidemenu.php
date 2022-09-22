@@ -36,7 +36,7 @@
           </li>
 
           <?php  
-            $menudropdown = array("pengguna", "akun", "penandatangan", "pengaturan", "gudang");
+            $menudropdown = array("pengguna", "akun", "penandatangan", "pengaturan", "gudang", "saldoawal");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{
@@ -90,6 +90,14 @@
                     <a href="<?php echo(site_url("gudang")) ?>" class="nav-link <?php echo ($menu=='gudang') ? 'active' : '' ?>">
                       <i class="fa fa-circle-notch nav-icon"></i>
                       <p>Gudang</p>
+                    </a>
+                  </li>
+
+
+                  <li class="nav-item">
+                    <a href="<?php echo(site_url("saldoawal")) ?>" class="nav-link <?php echo ($menu=='saldoawal') ? 'active' : '' ?>">
+                      <i class="fa fa-circle-notch nav-icon"></i>
+                      <p>Saldo Awal</p>
                     </a>
                   </li>
                    
@@ -178,7 +186,7 @@
 
 
           <?php  
-            $menudropdown = array("jurnalpenyesuaian", "lapjurnal");
+            $menudropdown = array("jurnalpenyesuaian", "lapjurnal", "lapbukubesar", "lapneracasaldo");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{
@@ -209,6 +217,20 @@
                     <a href="<?php echo(site_url("lapjurnal")) ?>" class="nav-link <?php echo ($menu=='lapjurnal') ? 'active' : '' ?>">
                       <i class="fa fa-print nav-icon"></i>
                       <p>Cetak Jurnal</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="<?php echo(site_url("lapbukubesar")) ?>" class="nav-link <?php echo ($menu=='lapbukubesar') ? 'active' : '' ?>">
+                      <i class="fa fa-print nav-icon"></i>
+                      <p>Buku Besar</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="<?php echo(site_url("lapneracasaldo")) ?>" class="nav-link <?php echo ($menu=='lapneracasaldo') ? 'active' : '' ?>">
+                      <i class="fa fa-print nav-icon"></i>
+                      <p>Neraca Saldo</p>
                     </a>
                   </li>
               

@@ -99,7 +99,7 @@
                         </div>
                       </div>
                       <div class="col-12 text-center mb-5">
-                            <button class="btn btn-info">Refresh</button>
+                            <button class="btn btn-info" id="btnRefresh">Refresh</button>
                             <a href="" class="btn btn-primary" id="btnCetakMA">Cetak</a>
                         
                       </div>
@@ -163,8 +163,11 @@
 
 
 
-function getchartbarangkeluar(kodeakun='')
+function getchartbarangkeluar()
 {
+    var kodeakun = $('#kodeakun').val();
+    var tglawalMA = $('#tglawalMA').val();
+    var tglakhirMA = $('#tglakhirMA').val();
 
     var ticksStyle = {
       fontColor: '#495057',
@@ -180,7 +183,7 @@ function getchartbarangkeluar(kodeakun='')
       url: '<?php echo site_url('home/getchartbarangkeluar') ?>',
       type: 'GET',
       dataType: 'json',
-      data: {'kodeakun': kodeakun},
+      data: {'kodeakun': kodeakun, 'tglawalMA': tglawalMA, 'tglakhirMA': tglakhirMA},
     })
     .done(function(resulttahunini) {
       console.log(resulttahunini);
@@ -236,11 +239,10 @@ function getchartbarangkeluar(kodeakun='')
 
 }
 
-
-  $('#kodeakun').change(function() {
-    var kodeakun = $(this).val();
-    getchartbarangkeluar(kodeakun);
+  $('#btnRefresh').click(function() {
+    getchartbarangkeluar();
   });
+
 
   $('#btnCetakMA').click(function(e) {
     e.preventDefault();
