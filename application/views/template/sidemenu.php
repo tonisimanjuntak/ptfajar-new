@@ -186,7 +186,7 @@
 
 
           <?php  
-            $menudropdown = array("jurnalpenyesuaian", "lapjurnal", "lapbukubesar", "lapneracasaldo");
+            $menudropdown = array("jurnalpenyesuaian", "lapjurnal", "lapbukubesar", "lapneracasaldo", "postingjurnal");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{
@@ -211,6 +211,13 @@
                       <p>Junal Penyesuaian</p>
                     </a>
                   </li>
+
+                  <li class="nav-item">
+                    <a href="<?php echo(site_url("postingjurnal")) ?>" class="nav-link <?php echo ($menu=='postingjurnal') ? 'active' : '' ?>">
+                      <i class="fa fa-circle-notch nav-icon"></i>
+                      <p>Posting Jurnal</p>
+                    </a>
+                  </li>
                   
 
                   <li class="nav-item">
@@ -233,8 +240,6 @@
                       <p>Neraca Saldo</p>
                     </a>
                   </li>
-              
-                  
 
 
             </ul>
