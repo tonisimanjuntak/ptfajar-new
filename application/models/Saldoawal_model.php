@@ -177,7 +177,7 @@ class Saldoawal_model extends CI_Model {
 					      ON (`saldoawaldetail`.`kodeakun` = `akun`.`kodeakun`)
 					   LEFT JOIN `saldoawal`
 					     ON (`saldoawaldetail`.`idsaldoawal` = `saldoawal`.`idsaldoawal`) and `saldoawal`.tahunanggaran='".$tahunanggaran."'  )
-					   where `level` = 4 and akun.parentakun='$jenisakun' and `saldoawal`.tahunanggaran='".$tahunanggaran."' order by akun.kodeakun
+					   where `level` = 4 and akun.parentakun='$jenisakun' order by akun.kodeakun
 	    		");
 
     	}else{
