@@ -105,7 +105,7 @@ class Saldoawal_model extends CI_Model {
 	        $this->db->insert('saldoawaldetail', $datasaldoawaldetail);
         }
 
-        $this->db->query("update saldoawal set totaldebet=$totaldebet, totalkredit=$totalkredit where idsaldoawal='$idsaldoawal'");
+        $this->db->query("update saldoawal set totaldebet=$totaldebet, totalkredit=$totalkredit where idsaldoawal='$data['idsaldoawal']'");
 
         if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();
@@ -145,8 +145,8 @@ class Saldoawal_model extends CI_Model {
 	        $this->db->insert('saldoawaldetail', $datasaldoawaldetail);
         }
 
-        $this->db->query("update saldoawal set totaldebet=$totaldebet, totalkredit=$totalkredit where idsaldoawal='$idsaldoawal'");
-
+        $this->db->query("update saldoawal set totaldebet=$totaldebet, totalkredit=$totalkredit where idsaldoawal='$data['idsaldoawal']'");
+        
         if ($this->db->trans_status() === FALSE){
                 $this->db->trans_rollback();
                 return false;
