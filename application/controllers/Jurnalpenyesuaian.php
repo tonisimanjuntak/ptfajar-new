@@ -143,6 +143,7 @@ class Jurnalpenyesuaian extends MY_Controller {
         $tgljurnal      = date('Y-m-d', strtotime($this->input->post('tgljurnal')));
         $tag            = '';
         $deskripsi      = $this->input->post('deskripsi');
+        $deskripsidetail      = $this->input->post('deskripsidetail');
         $kodeakun        = $this->input->post('kodeakun');
         $jumlah         = str_replace(',', '', $this->input->post('totaldebet') );
         $debet          = $this->input->post('debet');
@@ -172,6 +173,7 @@ class Jurnalpenyesuaian extends MY_Controller {
                 $arrDetail_temp = array(
                                     'idjurnal'      => $idjurnal, 
                                     'kodeakun' => $value, 
+                                    'deskripsi' => $deskripsidetail[$key], 
                                     'debet' => str_replace(',', '', $debet[$key] ), 
                                     'kredit' => str_replace(',', '', $kredit[$key] ),
                                     'nourut' => $urut++, 
@@ -200,6 +202,7 @@ class Jurnalpenyesuaian extends MY_Controller {
                 $arrDetail_temp = array(
                                     'idjurnal'      => $idjurnal, 
                                     'kodeakun' => $value, 
+                                    'deskripsi' => $deskripsidetail[$key], 
                                     'debet' => str_replace(',', '', $debet[$key] ), 
                                     'kredit' => str_replace(',', '', $kredit[$key] ),
                                     'nourut' => $urut++, 

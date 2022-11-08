@@ -67,8 +67,9 @@
                               <thead class="text-light" style="background-color:#055F93;">
                                   <tr class="th-jurnal">
                                       <th style="text-align: center;">Akun</th>
-                                      <th style="text-align: center; width: 20%;">Debet (Rp.)</th>
-                                      <th style="text-align: center; width: 20%;">Kredit (Rp.)</th>
+                                      <th style="text-align: center; width: 25%;">Deskripsi</th>
+                                      <th style="text-align: center; width: 10%;">Debet (Rp.)</th>
+                                      <th style="text-align: center; width: 10%;">Kredit (Rp.)</th>
                                       <th style="text-align: center; width: 5%;">#</th>                        
                                   </tr>
                               </thead>
@@ -156,7 +157,7 @@ var idjurnal = "<?php echo($idjurnal) ?>";
               encode      : true
           })      
           .done(function(result) {
-            // console.log(result);
+            console.log(result);
 
             $('#idjurnal').val(result.idjurnal);
             $('#deskripsi').val(result.deskripsi);
@@ -174,6 +175,7 @@ var idjurnal = "<?php echo($idjurnal) ?>";
               // $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(3)').html('');
               $('#kodeakun'+counter).val(value['kodeakun']);
               $('#namaakun'+counter).val(value['namaakun']);
+              $('#deskripsidetail'+counter).val(value['deskripsidetail']);
               $('#debet'+counter).val(numberWithCommas(value['debet']));
               $('#kredit'+counter).val(numberWithCommas(value['kredit']));
               counter += 1;
@@ -233,6 +235,7 @@ var idjurnal = "<?php echo($idjurnal) ?>";
     var counter = $('#table tbody tr').length + 1;
     var addrow = '<tr>';
         addrow += '<td><input type="text" name="namaakun[]" id="namaakun'+counter+'" class="form-control form-control-sm akunautocomplate" value=""><input type="hidden" name="kodeakun[]" id="kodeakun'+counter+'"></td>';
+        addrow += '<td><input type="text" name="deskripsidetail[]" id="deskripsidetail'+counter+'" class="form-control form-control-sm" value=""></td>';
         addrow += '<td><input type="text" name="debet[]" id="debet'+counter+'" class="form-control form-control-sm text-right" onchange="hitungtotal()"></td>';
         addrow += '<td><input type="text" name="kredit[]" id="kredit'+counter+'" class="form-control form-control-sm text-right" onchange="hitungtotal()"></td>';
         addrow += '<td style="text-align: center;"><a href="" id="removerow"><i class="fa fa-trash"></i></a></td>';
