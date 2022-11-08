@@ -53,6 +53,14 @@
                       </select>
                     </div>
                   </div>
+
+                  <div class="form-group row required" id="divsupplier">
+                    <label for="" class="col-md-2 col-form-label">Nama Supplier</label>
+                    <div class="col-md-10">
+                      <input type="text" name="namasupplier" id="namasupplier" class="form-control" placeholder="Masukkan nama supplier">
+                    </div>
+                  </div>
+
                   <div class="form-group row required" id="dividgudang">
                     <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
                     <div class="col-md-10">
@@ -190,7 +198,8 @@
   $(document).ready(function() {
 
     $('.select2').select2();
-    $('#dividgudang').hide();
+    // $('#dividgudang').hide();
+    $('#jenispenerimaan').change();
 
     table = $('#table').DataTable({ 
         "select": true,
@@ -266,9 +275,14 @@
             $('#tglpenerimaan').val(result.tglpenerimaan);
             $('#deskripsi').val(result.deskripsi);
             $('#idgudang').val(result.idgudang).trigger('change');
+            $('#namasupplier').val(result.namasupplier);
             $('#jenispenerimaan').val(result.jenispenerimaan);
             if (result.jenispenerimaan=='Barang Masuk') {
               $('#dividgudang').show();
+              $('#divsupplier').hide();
+            }else{
+              $('#dividgudang').hide();
+              $('#divsupplier').show();
             }
           }); 
           
@@ -381,8 +395,11 @@
     var jenispenerimaan = $(this).val();
     if (jenispenerimaan=='Barang Masuk') {
       $('#dividgudang').show();
+      $('#divsupplier').hide();
+      $('#namasupplier').val('');
     }else{
       $('#dividgudang').hide();
+      $('#divsupplier').show();
       $('#idgudang').val("").trigger('change');
     }
   });
@@ -393,6 +410,7 @@
     var tglpenerimaan       = $("#tglpenerimaan").val();
     var deskripsi       = $("#deskripsi").val();
     var idgudang       = $("#idgudang").val();
+    var namasupplier       = $("#namasupplier").val();
     var jenispenerimaan       = $("#jenispenerimaan").val();
     var jumlahpenerimaan       = $("#total").val();
 
@@ -429,6 +447,7 @@
               "tglpenerimaan"       : tglpenerimaan,
               "deskripsi"       : deskripsi,
               "idgudang"       : idgudang,
+              "namasupplier"       : namasupplier,
               "jenispenerimaan"       : jenispenerimaan,
               "jumlahpenerimaan"       : jumlahpenerimaan,
               "isidatatable"    : isidatatable

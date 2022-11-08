@@ -6,12 +6,12 @@
 
   <div class="row" id="toni-breadcrumb">
     <div class="col-6">
-        <h4 class="text-dark mt-2">Riwayat Stok</h4>
+        <h4 class="text-dark mt-2">Stok Barang</h4>
     </div>  
     <div class="col-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="<?php echo(site_url()) ?>">Home</a></li>
-        <li class="breadcrumb-item active">Riwayat Stok</li>
+        <li class="breadcrumb-item active">Stok Barang</li>
       </ol>
       
     </div>
@@ -31,16 +31,6 @@
             <div class="col-md-4"></div>
             <div class="col-md-8 text-bold">
                 
-                <div class="form-group row">
-                    <label for="tglawal" class="col-md-3 col-form-label text-right">Periode Laporan</label>
-                    <div class="col-md-4">
-                        <input type="date" name="tglawal" id="tglawal" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                    </div>
-                    <label for="tglakhir" class="col-md-1 col-form-label text-center">s/d</label>
-                    <div class="col-md-4">
-                        <input type="date" name="tglakhir" id="tglakhir" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                    </div>
-                </div>
                 <div class="form-group row">
                     <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Akun Barang</label>
                     <div class="col-md-9">
@@ -99,22 +89,9 @@
 
         // fileter
         
-        var kodeakun                 = $('#kodeakun').val();
-        var tglawal                 = $('#tglawal').val();
-        var tglakhir                 = $('#tglakhir').val();
+        var kodeakun                 = $('#kodeakun').val();        
 
-
-        if (kodeakun=='-') {
-          swal("Nama Akun Barang!", "Nama akun barang tidak boleh kosong!", "warning");
-          return;
-        }
-
-        if (tglawal=='' || tglakhir=='') {
-          swal("Tanggal Periode!", "Tanggal periode tidak boleh kosong!", "warning");
-          return;
-        }
-
-        window.open("<?php echo site_url('kartustok/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + kodeakun  + "/Lap Riwayat Stok");
+        window.open("<?php echo site_url('lapstokbarang/cetak/pdf/') ?>" + kodeakun  + "/Lap Stok Barang");
     });
 
 
@@ -124,21 +101,8 @@
         // fileter
         
         var kodeakun                 = $('#kodeakun').val();
-        var tglawal                 = $('#tglawal').val();
-        var tglakhir                 = $('#tglakhir').val();
 
-
-        if (kodeakun=='-') {
-          swal("Nama Akun Barang!", "Nama akun barang tidak boleh kosong!", "warning");
-          return;
-        }
-
-        if (tglawal=='' || tglakhir=='') {
-          swal("Tanggal Periode!", "Tanggal periode tidak boleh kosong!", "warning");
-          return;
-        }
-
-        window.open("<?php echo site_url('kartustok/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + kodeakun + "/Lap Riwayat Stok");
+        window.open("<?php echo site_url('lapstokbarang/cetak/excel/') ?>" + kodeakun + "/Lap Stok Barang");
 
 
     });

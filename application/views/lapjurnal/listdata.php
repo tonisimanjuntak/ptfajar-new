@@ -87,7 +87,7 @@
           return;
         }
 
-        window.open("<?php echo site_url('lapjurnal/cetak/pdf/') ?>" + tglawal + "/" + tglakhir  + "/Lap Buku Besar");
+        window.open("<?php echo site_url('lapjurnal/cetak/pdf/') ?>" + tglawal + "/" + tglakhir  + "/Lap Jurnal");
     });
 
 
@@ -116,7 +116,7 @@
             kdakun4='-';
         }
 
-        window.open("<?php echo site_url('lapjurnal/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + kdakun3 + "/" + kdakun4 + "/Lap Buku Besar");
+        window.open("<?php echo site_url('lapjurnal/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + kdakun3 + "/" + kdakun4 + "/Lap Jurnal");
 
 
     });

@@ -31,8 +31,9 @@ class Lappenerimaan extends CI_Controller {
         $jeniscetakan       = $this->uri->segment(3);
         $tglawal 			= date('Y-m-d', strtotime($this->uri->segment(4))) ;
         $tglakhir 			= date('Y-m-d', strtotime($this->uri->segment(5))) ;
-        $idgudang       	= $this->uri->segment(6);
-        $kodeakun       	= $this->uri->segment(7);
+        $idgudang           = $this->uri->segment(6);
+        $namasupplier       	= $this->uri->segment(7);
+        $kodeakun       	= $this->uri->segment(8);
 
         $wherekodeakun = '';
         if ($kodeakun!='-') {
@@ -44,8 +45,14 @@ class Lappenerimaan extends CI_Controller {
         	$whereidgudang = " and idgudang like '%".$idgudang."%' ";
         }
 
+        $wherenamasupplier = '';
+        if ($namasupplier!='-') {
+            $namasupplier = urldecode($namasupplier);
+            $wherenamasupplier = " and namasupplier like '%".$namasupplier."%' ";
+        }
+
         $rsdetail			= $this->db->query("
-        								select * from v_penerimaandetail2 where tglpenerimaan between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun." order by v_penerimaandetail2.tglpenerimaan, v_penerimaandetail2.idpenerimaan, v_penerimaandetail2.kodeakun
+        								select * from v_penerimaandetail2 where tglpenerimaan between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun." ".$wherenamasupplier." order by v_penerimaandetail2.tglpenerimaan, v_penerimaandetail2.idpenerimaan, v_penerimaandetail2.kodeakun
         							");
         
 
@@ -81,6 +88,27 @@ class Lappenerimaan extends CI_Controller {
 		}
 		echo json_encode($arrAkun4);
 	}
+
+    public function getnamasupplier()
+    {
+        $cari= $this->input->post('cari');
+        $query = "
+            SELECT namasupplier FROM v_penerimaan 
+                    WHERE namasupplier LIKE '%".$cari."%'
+                    GROUP BY namasupplier order by namasupplier";
+
+        $res = $this->db->query($query);        
+        $result = array();
+
+        foreach ($res->result() as $row) {
+            if (!empty($row->namasupplier)) {                
+                array_push($result, array(
+                    'namasupplier' => $row->namasupplier,
+                ));
+            }
+        }
+        echo json_encode($result);
+    }
 
 }
 

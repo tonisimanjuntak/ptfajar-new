@@ -113,9 +113,9 @@ $this->load->view("template/sidemenu");
         }
 
         if (jeniscetakan=='pdf') {
-          window.open("<?php echo site_url('lapneracasaldo/cetak/pdf/') ?>" + jenisakun + "/" + tglawal + "/" + tglakhir );          
+          window.open("<?php echo site_url('lapneracasaldo/cetak/pdf/') ?>" + jenisakun + "/" + tglawal + "/" + tglakhir + "/Lap Neraca Saldo");          
         }else{
-          window.open("<?php echo site_url('lapneracasaldo/cetak/excel/') ?>" + jenisakun + "/" + tglawal + "/" + tglakhir );          
+          window.open("<?php echo site_url('lapneracasaldo/cetak/excel/') ?>" + jenisakun + "/" + tglawal + "/" + tglakhir + "/Lap Neraca Saldo");          
         }
   }
 

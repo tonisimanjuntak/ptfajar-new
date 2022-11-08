@@ -37,7 +37,7 @@
                       <th style="width: 5%; text-align: center;">No</th>
                       <th style="text-align: center;">Tgl /<br>ID Pengeluaran</th>
                       <th style="text-align: center;">Deskripsi</th>
-                      <th style="text-align: center;">Nama Gudang</th>
+                      <th style="text-align: center;">Nama Gudang/<br>Nama Konsumen</th>
                       <th style="text-align: center;">Jenis Pengeluaran</th>
                       <th style="text-align: center;">Total Pengeluaran</th>
                       <th style="text-align: center; width: 15%;">Aksi</th>

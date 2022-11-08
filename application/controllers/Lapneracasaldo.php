@@ -64,7 +64,7 @@ class Lapneracasaldo extends MY_Controller {
         if ($jeniscetakan=='pdf') {
 	        $this->load->view('lapneracasaldo/cetak', $data);        	
         }else{
-        	$data['namafile'] = 'download-laporan.xls';
+        	$data['namafile'] = 'Lap Neraca Saldo.xls';
 	        $this->load->view('lapneracasaldo/excel', $data);
         }
     }

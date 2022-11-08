@@ -20,7 +20,36 @@ class Lapjurnal extends CI_Controller {
 	}
 
 
-	public function cetak()
+	public function cetak_old()
+    {
+        error_reporting(0);
+        $this->load->library('Pdf');
+
+        $jeniscetakan       = $this->uri->segment(3);
+        $tglawal 			= date('Y-m-d', strtotime($this->uri->segment(4))) ;
+        $tglakhir 			= date('Y-m-d', strtotime($this->uri->segment(5))) ;
+
+        $rsdetailjurnal			= $this->db->query("
+        								select * from v_jurnaldetail where tgljurnal between '$tglawal' and '$tglakhir' order by v_jurnaldetail.tgljurnal, v_jurnaldetail.idjurnal, v_jurnaldetail.nourut
+        							");
+        
+
+        $rowpengaturan = $this->db->query("select * from pengaturan")->row();
+
+        $data['rowpengaturan'] = $rowpengaturan;
+        $data['rslaporan'] = $rsdetailjurnal;
+        $data['tglawal'] = $tglawal;
+        $data['tglakhir'] = $tglakhir;
+        $data['tahunperiode'] = date('Y', strtotime($tglawal));
+        
+        if (strtoupper($jeniscetakan)=='EXCEL') {
+            $this->load->view('lapjurnal/excel', $data);
+        }else{
+            $this->load->view('lapjurnal/cetak', $data);
+        }
+    }
+
+    public function cetak()
     {
         error_reporting(0);
         $this->load->library('Pdf');

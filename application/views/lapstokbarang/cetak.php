@@ -61,17 +61,11 @@ class MYPDF extends TCPDF {
 
         
 // create new PDF document
-$pdf = new MYPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+$pdf = new MYPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
 
 $pdf->AddPage();
 
 $pdf->SetTopMargin(0);
-
-if ($tglawal==$tglakhir) {
-    $periode = strtoupper(tglindonesialengkap($tglawal));
-}else{
-    $periode = strtoupper(tglindonesialengkap($tglawal)).' S/D '.strtoupper(tglindonesialengkap($tglakhir));
-}
 
 
 if (!empty($rowpengaturan->logoperusahaan)) {
@@ -91,8 +85,7 @@ $title = '
                     <img src="'.$logoperusahaan.'" style="height:80px; width:auto; display:block; margin:0 auto;">
                 </td>
                 <td style="width:50%; text-align:center;">
-                    <span style="">RIWAYAT STOK</span><br>
-                    <span style="font-size: 14px;">PERIODE : '.$periode.'</span>
+                    <span style="">LAPORAN STOK BARANG</span><br>
                 </td>                
             </tr>
         </tbody>
@@ -104,61 +97,32 @@ $pdf->SetTopMargin(1);
 
 $table = '';
 
-$table  .= '<br>
-            <table border="0" width="100%" cellpadding="5">
-                <thead>
-                    <tr style="font-size: 14px; font-weight: bold;">
-                        <th style="width: 20%;">KODE AKUN BARANG</th>
-                        <th style="width: 5%; text-align: center;">:</th>
-                        <th style="width: 75%;">'.$rowakun->kodeakun.'</th>
-                    </tr>
-                    <tr style="font-size: 14px; font-weight: bold;">
-                        <th style="width: 20%;">NAMA AKUN BARANG</th>
-                        <th style="width: 5%; text-align: center;">:</th>
-                        <th style="width: 75%;">'.$rowakun->namaakun.'</th>
-                    </tr>
-                </thead>
-            </table>
-            ';
 
-
-$table  .= '<br><br><table border="1" width="100%" cellpadding="5">';
+$table .= '<table border="1" width="100%" cellpadding="5">';
 $table .= ' 
             <thead>
                 <tr style="background-color:#ccc; font-size:11px; font-weight:bold;">
                     <th style="text-align:center;" width="5%">NO</th>
-                    <th style="text-align:center;" width="15%">TANGGAL</th>
-                    <th style="text-align:center;" width="10%">NO BUKTI</th>
-                    <th style="text-align:center;" width="10%">TGL BUKTI</th>
-                    <th style="text-align:center;" width="8%">STOK AWAL</th>
-                    <th style="text-align:center;" width="8%">TERIMA</th>
-                    <th style="text-align:center;" width="8%">KELUAR</th>
-                    <th style="text-align:center;" width="10%">STOK AKHIR</th>
-                    <th style="text-align:center;" width="26%">KETERANGAN</th>
+                    <th style="text-align:center;" width="15%">KODE BARANG</th>
+                    <th style="text-align:center;" width="65%">NAMA BARANG</th>
+                    <th style="text-align:center;" width="15%">STOK</th>
                 </tr>
             </thead>
             <tbody>';
 
 
-$nomor = $this->db->query("select count(*) as nomor from kartustok where kodeakun='$kodeakun' and CONVERT(tglinsert, DATE) < '".$tglawal."'")->row()->nomor;
-$nomor++;
-if ($rskartustok->num_rows() > 0) {
-    
-    foreach ($rskartustok->result() as $row) {
 
-        
+$nomor = 1;
+if ($rsstok->num_rows() > 0) {
+    
+    foreach ($rsstok->result() as $row) {
 
         $table .= '
                 <tr style="font-size:10px;">
                     <td style="text-align:center;" width="5%">'.$nomor++.'</td>
-                    <td style="text-align:center;" width="15%">'.date('d-m-Y H:i:s', strtotime($row->tglinsert)).'</td>
-                    <td style="text-align:center;" width="10%">'.$row->idtransaksi.'</td>
-                    <td style="text-align:center;" width="10%">'.$row->tgltransaksi.'</td>
-                    <td style="text-align:center;" width="8%">'.number_format($row->stokawal).'</td>
-                    <td style="text-align:center;" width="8%">'.number_format($row->jumlahmasuk).'</td>
-                    <td style="text-align:center;" width="8%">'.number_format($row->jumlahkeluar).'</td>
-                    <td style="text-align:center;" width="10%">'.number_format($row->stokakhir).'</td>
-                    <td style="text-align:left;" width="26%">'.$row->deskripsi.'</td>
+                    <td style="text-align:center;" width="15%">'.$row->kodeakun.'</td>
+                    <td style="text-align:left;" width="65%">'.$row->namaakun.'</td>
+                    <td style="text-align:center;" width="15%">'.number_format($row->jumlahpersediaan).'</td>
                 </tr>
         ';
 
@@ -172,7 +136,6 @@ if ($rskartustok->num_rows() > 0) {
                 </tr>';
 }
             
-
 
 
 $table .= ' </tbody>

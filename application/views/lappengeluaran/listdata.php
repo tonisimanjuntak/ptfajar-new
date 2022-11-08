@@ -61,6 +61,13 @@
 
                 </div>
                 <div class="form-group row">
+                    <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Konsumen</label>
+                    <div class="col-md-9">
+                      <input type="text" name="namakonsumen" id="namakonsumen" class="form-control" placeholder="Cari nama konsumen...">
+                    </div>
+
+                </div>
+                <div class="form-group row">
                     <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Akun Barang</label>
                     <div class="col-md-9">
                       <select name="kodeakun" id="kodeakun" class="form-control select2">
@@ -77,6 +84,18 @@
                             }
                           }
                         ?>
+                      </select>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <label for="tglawal" class="col-md-3 col-form-label text-right">Status Barang</label>
+                    <div class="col-md-9">
+                      <select name="statusbarang" id="statusbarang" class="form-control select2">
+                        <option value="-">Semua status barang...</option>
+                        <option value="Belum Terkirim">Belum Terkirim</option>
+                        <option value="Sudah Terkirim">Sudah Terkirim</option>
+                        
                       </select>
                     </div>
 
@@ -120,6 +139,8 @@
         
         var kodeakun                 = $('#kodeakun').val();
         var idgudang                 = $('#idgudang').val();
+        var namakonsumen                 = $('#namakonsumen').val();
+        var statusbarang                 = $('#statusbarang').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
 
@@ -129,7 +150,17 @@
           return;
         }
 
-        window.open("<?php echo site_url('lappengeluaran/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + idgudang + '/' + kodeakun  + "/Lap Pengeluaran Barang");
+        if (namakonsumen=="") {
+          namakonsumen = "-";
+        }else{
+          namakonsumen = encodeURI(namakonsumen);
+        }
+
+        if (statusbarang!="-") {
+          statusbarang = encodeURI(statusbarang);
+        }
+
+        window.open("<?php echo site_url('lappengeluaran/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + idgudang + "/" + namakonsumen + "/" + statusbarang + '/' + kodeakun  + "/Lap Pengeluaran Barang");
     });
 
 
@@ -142,18 +173,53 @@
         var idgudang                 = $('#idgudang').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
-
+        var namakonsumen                 = $('#namakonsumen').val();
+        var statusbarang                 = $('#statusbarang').val();
 
         if (tglawal=='' || tglakhir=='') {
           swal("Tanggal Periode!", "Tanggal periode tidak boleh kosong!", "warning");
           return;
         }
 
-        window.open("<?php echo site_url('lappengeluaran/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + idgudang + '/' + kodeakun + "/Lap Pengeluaran Barang");
+        if (namakonsumen=="") {
+          namakonsumen = "-";
+        }else{
+          namakonsumen = encodeURI(namakonsumen);
+        }
+
+        window.open("<?php echo site_url('lappengeluaran/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + idgudang + "/" + namakonsumen + "/" + statusbarang + '/' + kodeakun + "/Lap Pengeluaran Barang");
 
 
     });
 
+
+    $( "#namakonsumen").autocomplete({
+      minLength: 0,
+      source: function( request, response ){
+          $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('lappengeluaran/getnamakonsumen'); ?>",
+            dataType: "json",
+            data:{cari: request.term},
+            success: function(data){
+              response( data );
+            }
+          });
+      },
+      focus: function( event, ui ) {      
+        $('#namakonsumen').val(ui.item.namakonsumen);
+        return false;
+      },
+      select: function( event, ui ) {
+        $('#namakonsumen').val(ui.item.namakonsumen);
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div><strong>" + item.namakonsumen + "</strong></div>" )
+        .appendTo( ul );
+    };
 
 </script>
 

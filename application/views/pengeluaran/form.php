@@ -55,6 +55,13 @@
                     </div>
                   </div>
 
+                  <div class="form-group row required" id="divnamakonsumen">
+                    <label for="" class="col-md-2 col-form-label">Nama Konsumen</label>
+                    <div class="col-md-10">
+                      <input type="text" name="namakonsumen" id="namakonsumen" class="form-control" placeholder="Masukkan nama konsumen">
+                    </div>
+                  </div>
+
                   <div class="form-group row required" id="dividgudang">
                     <label for="" class="col-md-2 col-form-label">Nama Gudang</label>
                     <div class="col-md-10">
@@ -193,7 +200,8 @@
   $(document).ready(function() {
 
     $('.select2').select2();
-    $('#dividgudang').hide();
+    // $('#dividgudang').hide();
+    $('#jenispengeluaran').change();
 
     table = $('#table').DataTable({ 
         "select": true,
@@ -269,9 +277,14 @@
             $('#tglpengeluaran').val(result.tglpengeluaran);
             $('#deskripsi').val(result.deskripsi);
             $('#idgudang').val(result.idgudang).trigger('change');
+            $('#namakonsumen').val(result.namakonsumen);
             $('#jenispengeluaran').val(result.jenispengeluaran);
             if (result.jenispengeluaran=='Barang Keluar') {
               $('#dividgudang').show();
+              $('#divnamakonsumen').hide();
+            }else{
+              $('#dividgudang').hide();
+              $('#divnamakonsumen').show();
             }
           }); 
           
@@ -390,8 +403,11 @@
     var jenispengeluaran = $(this).val();
     if (jenispengeluaran=='Barang Keluar') {
       $('#dividgudang').show();
+      $('#divnamakonsumen').hide();
+      $('#namakonsumen').val("");
     }else{
       $('#dividgudang').hide();
+      $('#divnamakonsumen').show();
       $('#idgudang').val("").trigger('change');
     }
   });
@@ -402,6 +418,7 @@
     var tglpengeluaran       = $("#tglpengeluaran").val();
     var deskripsi       = $("#deskripsi").val();
     var idgudang       = $("#idgudang").val();
+    var namakonsumen       = $("#namakonsumen").val();
     var jenispengeluaran       = $("#jenispengeluaran").val();
     var jumlahpengeluaran       = $("#total").val();
 
@@ -438,6 +455,7 @@
               "tglpengeluaran"       : tglpengeluaran,
               "deskripsi"       : deskripsi,
               "idgudang"       : idgudang,
+              "namakonsumen"       : namakonsumen,
               "jenispengeluaran"       : jenispengeluaran,
               "jumlahpengeluaran"       : jumlahpengeluaran,
               "isidatatable"    : isidatatable

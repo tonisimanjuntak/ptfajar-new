@@ -99,7 +99,7 @@ class Pengeluaran extends MY_Controller {
                 $row[] = $no;
                 $row[] = tglindonesia($rowdata->tglpengeluaran).'<br>'.$rowdata->idpengeluaran;
                 $row[] = $rowdata->deskripsi;
-                $row[] = $rowdata->namagudang;
+                $row[] = $rowdata->namagudang.$rowdata->namakonsumen;
                 $row[] = $rowdata->jenispengeluaran;
                 $row[] = 'Rp. '.format_rupiah($rowdata->jumlahpengeluaran);
 
@@ -205,6 +205,7 @@ class Pengeluaran extends MY_Controller {
         $tglpengeluaran           = $this->input->post('tglpengeluaran');
         $deskripsi           = $this->input->post('deskripsi');
         $idgudang           = $this->input->post('idgudang');
+        $namakonsumen           = $this->input->post('namakonsumen');
         $jenispengeluaran           = $this->input->post('jenispengeluaran');
         $jumlahpengeluaran           = untitik($this->input->post('jumlahpengeluaran'));
         $created_at           = date('Y-m-d H:i:s');
@@ -233,6 +234,7 @@ class Pengeluaran extends MY_Controller {
                                 'tglpengeluaran' => $tglpengeluaran,
                                 'deskripsi' => $deskripsi,
                                 'idgudang' => $idgudang,
+                                'namakonsumen' => $namakonsumen,
                                 'jenispengeluaran' => $jenispengeluaran,
                                 'jumlahpengeluaran' => $jumlahpengeluaran,
                                 'created_at' => $created_at,
@@ -273,6 +275,7 @@ class Pengeluaran extends MY_Controller {
                                 'tglpengeluaran' => $tglpengeluaran,
                                 'deskripsi' => $deskripsi,
                                 'idgudang' => $idgudang,
+                                'namakonsumen' => $namakonsumen,
                                 'jenispengeluaran' => $jenispengeluaran,
                                 'jumlahpengeluaran' => $jumlahpengeluaran,
                                 'updated_at' => $updated_at,
@@ -328,6 +331,7 @@ class Pengeluaran extends MY_Controller {
                     'tglpengeluaran'     =>  $RsData->tglpengeluaran,
                     'deskripsi'     =>  $RsData->deskripsi,
                     'idgudang'     =>  $RsData->idgudang,
+                    'namakonsumen'     =>  $RsData->namakonsumen,
                     'jenispengeluaran'     =>  $RsData->jenispengeluaran,
                     'jumlahpengeluaran'     =>  $RsData->jumlahpengeluaran,
                     'created_at'     =>  $RsData->created_at,

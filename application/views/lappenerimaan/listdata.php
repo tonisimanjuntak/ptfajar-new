@@ -61,6 +61,13 @@
 
                 </div>
                 <div class="form-group row">
+                    <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Supplier</label>
+                    <div class="col-md-9">
+                      <input type="text" name="namasupplier" id="namasupplier" class="form-control" placeholder="Cari nama supplier">
+                    </div>
+
+                </div>
+                <div class="form-group row">
                     <label for="tglawal" class="col-md-3 col-form-label text-right">Nama Akun Barang</label>
                     <div class="col-md-9">
                       <select name="kodeakun" id="kodeakun" class="form-control select2">
@@ -120,6 +127,7 @@
         
         var kodeakun                 = $('#kodeakun').val();
         var idgudang                 = $('#idgudang').val();
+        var namasupplier                 = $('#namasupplier').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
 
@@ -128,8 +136,11 @@
           swal("Tanggal Periode!", "Tanggal periode tidak boleh kosong!", "warning");
           return;
         }
+        if (namasupplier=="") {
+          namasupplier="-";
+        }
 
-        window.open("<?php echo site_url('lappenerimaan/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + idgudang + '/' + kodeakun  + "/Lap Penerimaan Barang");
+        window.open("<?php echo site_url('lappenerimaan/cetak/pdf/') ?>" + tglawal + "/" + tglakhir + "/" + idgudang + "/" + namasupplier + '/' + kodeakun  + "/Lap Penerimaan Barang");
     });
 
 
@@ -140,6 +151,7 @@
         
         var kodeakun                 = $('#kodeakun').val();
         var idgudang                 = $('#idgudang').val();
+        var namasupplier                 = $('#namasupplier').val();
         var tglawal                 = $('#tglawal').val();
         var tglakhir                 = $('#tglakhir').val();
 
@@ -148,12 +160,44 @@
           swal("Tanggal Periode!", "Tanggal periode tidak boleh kosong!", "warning");
           return;
         }
+        if (namasupplier=="") {
+          namasupplier="-";
+        }else{
+          namasupplier = encodeURI(namasupplier);
+        }
 
-        window.open("<?php echo site_url('lappenerimaan/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + idgudang + '/' + kodeakun + "/Lap Penerimaan Barang");
+        window.open("<?php echo site_url('lappenerimaan/cetak/excel/') ?>" + tglawal + "/" + tglakhir  + "/" + idgudang + "/" + namasupplier + '/' + kodeakun + "/Lap Penerimaan Barang");
 
 
     });
 
+    $( "#namasupplier").autocomplete({
+      minLength: 0,
+      source: function( request, response ){
+          $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('lappenerimaan/getnamasupplier'); ?>",
+            dataType: "json",
+            data:{cari: request.term},
+            success: function(data){
+              response( data );
+            }
+          });
+      },
+      focus: function( event, ui ) {      
+        $('#namasupplier').val(ui.item.namasupplier);
+        return false;
+      },
+      select: function( event, ui ) {
+        $('#namasupplier').val(ui.item.namasupplier);
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div><strong>" + item.namasupplier + "</strong></div>" )
+        .appendTo( ul );
+    };
 
 </script>
 

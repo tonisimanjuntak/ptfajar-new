@@ -71,7 +71,7 @@ class Lapbukubesar extends MY_Controller {
         if ($jeniscetakan=='pdf') {
 	        $this->load->view('lapbukubesar/cetak', $data);        	
         }else{
-        	$data['namafile'] = 'download-laporan.xls';
+        	$data['namafile'] = 'Lap Buku Besar.xls';
 	        $this->load->view('lapbukubesar/excel', $data);
         }
     }

@@ -108,7 +108,7 @@
           
 
           <?php  
-            $menudropdown = array("penerimaan", "pengeluaran", "lappenerimaan", "lappengeluaran", "stokopname", "kartustok", "konfirmasiterkirim");
+            $menudropdown = array("penerimaan", "pengeluaran", "lappenerimaan", "lappengeluaran", "stokopname", "kartustok", "konfirmasiterkirim", "lapstokbarang");
             if (in_array($menu, $menudropdown)) {
               $dropdownselected = true;
             }else{
@@ -172,9 +172,16 @@
                   </li>
 
                   <li class="nav-item">
+                    <a href="<?php echo(site_url("lapstokbarang")) ?>" class="nav-link <?php echo ($menu=='lapstokbarang') ? 'active' : '' ?>">
+                      <i class="fa fa-print nav-icon"></i>
+                      <p>Laporan Stok Barang</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
                     <a href="<?php echo(site_url("kartustok")) ?>" class="nav-link <?php echo ($menu=='kartustok') ? 'active' : '' ?>">
                       <i class="fa fa-print nav-icon"></i>
-                      <p>Kartu Stok</p>
+                      <p>Riwayat Stok</p>
                     </a>
                   </li>
               

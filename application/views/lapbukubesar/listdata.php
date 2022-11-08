@@ -128,9 +128,9 @@ $this->load->view("template/sidemenu");
         }
 
         if (jeniscetakan=='pdf') {
-          window.open("<?php echo site_url('lapbukubesar/cetak/pdf/') ?>" + jenisakun + "/" + kodeakun + "/" + tglawal + "/" + tglakhir );          
+          window.open("<?php echo site_url('lapbukubesar/cetak/pdf/') ?>" + jenisakun + "/" + kodeakun + "/" + tglawal + "/" + tglakhir + "/Lap Buku Besar");          
         }else{
-          window.open("<?php echo site_url('lapbukubesar/cetak/excel/') ?>" + jenisakun + "/" + kodeakun + "/" + tglawal + "/" + tglakhir );          
+          window.open("<?php echo site_url('lapbukubesar/cetak/excel/') ?>" + jenisakun + "/" + kodeakun + "/" + tglawal + "/" + tglakhir + "/Lap Buku Besar");          
         }
   }
 

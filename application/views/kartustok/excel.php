@@ -40,7 +40,7 @@ $table .= '
         <tbody>
             <tr>
                 <td style="width:100%; text-align:center;">
-                    <span style="">LAPORAN PENERIMAAN</span><br>
+                    <span style="">RIWAYAT STOK</span><br>
                     <span style="font-size: 14px;">PERIODE : '.$periode.'</span>
                 </td>                
             </tr>

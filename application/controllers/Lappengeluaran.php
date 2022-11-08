@@ -31,8 +31,10 @@ class Lappengeluaran extends CI_Controller {
         $jeniscetakan       = $this->uri->segment(3);
         $tglawal 			= date('Y-m-d', strtotime($this->uri->segment(4))) ;
         $tglakhir 			= date('Y-m-d', strtotime($this->uri->segment(5))) ;
-        $idgudang       	= $this->uri->segment(6);
-        $kodeakun       	= $this->uri->segment(7);
+        $idgudang           = $this->uri->segment(6);
+        $namakonsumen           = $this->uri->segment(7);
+        $statusbarang       	= $this->uri->segment(8);
+        $kodeakun       	= $this->uri->segment(9);
 
 
 
@@ -46,8 +48,21 @@ class Lappengeluaran extends CI_Controller {
         	$whereidgudang = " and idgudang like '%".$idgudang."%' ";
         }
 
+        $wherenamakonsumen = "";
+        if ($namakonsumen!='-') {
+            $namakonsumen = urldecode($namakonsumen);
+            $wherenamakonsumen = " and namakonsumen like '%".$namakonsumen."%' ";
+        }
+
+        $wherestatusbarang = "";
+        if ($statusbarang!='-') {
+            $statusbarang = urldecode($statusbarang);
+            $wherestatusbarang = " and jenispengeluaran='Barang Keluar' and statusterkirim like '%".$statusbarang."%' ";
+        }
+
+
         $rsdetail			= $this->db->query("
-        								select * from v_pengeluarandetail2 where tglpengeluaran between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun." order by v_pengeluarandetail2.tglpengeluaran, v_pengeluarandetail2.idpengeluaran, v_pengeluarandetail2.kodeakun
+        								select * from v_pengeluarandetail2 where tglpengeluaran between '$tglawal' and '$tglakhir' ".$whereidgudang." ".$wherekodeakun.$wherenamakonsumen.$wherestatusbarang." order by v_pengeluarandetail2.tglpengeluaran, v_pengeluarandetail2.idpengeluaran, v_pengeluarandetail2.kodeakun
         							");
         
 
@@ -83,6 +98,27 @@ class Lappengeluaran extends CI_Controller {
 		}
 		echo json_encode($arrAkun4);
 	}
+
+    public function getnamakonsumen()
+    {
+        $cari= $this->input->post('cari');
+        $query = "
+            SELECT namakonsumen FROM v_pengeluaran 
+                    WHERE namakonsumen LIKE '%".$cari."%'
+                    GROUP BY namakonsumen order by namakonsumen";
+
+        $res = $this->db->query($query);        
+        $result = array();
+
+        foreach ($res->result() as $row) {
+            if (!empty($row->namakonsumen)) {                
+                array_push($result, array(
+                    'namakonsumen' => $row->namakonsumen,
+                ));
+            }
+        }
+        echo json_encode($result);
+    }
 
 }
 
